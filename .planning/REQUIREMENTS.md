@@ -97,40 +97,40 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFRA-01 | TBD | Pending |
-| INFRA-02 | TBD | Pending |
-| INFRA-03 | TBD | Pending |
-| INFRA-04 | TBD | Pending |
-| CLUB-01 | TBD | Pending |
-| CLUB-02 | TBD | Pending |
-| CLUB-03 | TBD | Pending |
-| CLUB-04 | TBD | Pending |
-| CLUB-05 | TBD | Pending |
-| MEMB-01 | TBD | Pending |
-| MEMB-02 | TBD | Pending |
-| MEMB-03 | TBD | Pending |
-| MEMB-04 | TBD | Pending |
-| EVNT-01 | TBD | Pending |
-| EVNT-02 | TBD | Pending |
-| EVNT-03 | TBD | Pending |
-| EVNT-04 | TBD | Pending |
-| EVNT-05 | TBD | Pending |
-| EVNT-06 | TBD | Pending |
-| BOT-01 | TBD | Pending |
-| BOT-02 | TBD | Pending |
-| BOT-03 | TBD | Pending |
-| BOT-04 | TBD | Pending |
-| REG-01 | TBD | Pending |
-| REG-02 | TBD | Pending |
-| REG-03 | TBD | Pending |
-| REG-04 | TBD | Pending |
-| REG-05 | TBD | Pending |
+| INFRA-01 | Phase 1 | Pending |
+| INFRA-02 | Phase 1 | Pending |
+| INFRA-03 | Phase 1 | Pending |
+| INFRA-04 | Phase 1 | Pending |
+| CLUB-01 | Phase 2 | Pending |
+| CLUB-02 | Phase 2 | Pending |
+| CLUB-03 | Phase 2 | Pending |
+| CLUB-04 | Phase 2 | Pending |
+| CLUB-05 | Phase 2 | Pending |
+| MEMB-01 | Phase 3 | Pending |
+| MEMB-02 | Phase 3 | Pending |
+| MEMB-03 | Phase 3 | Pending |
+| MEMB-04 | Phase 3 | Pending |
+| EVNT-01 | Phase 4 | Pending |
+| EVNT-02 | Phase 4 | Pending |
+| EVNT-03 | Phase 6 | Pending |
+| EVNT-04 | Phase 6 | Pending |
+| EVNT-05 | Phase 6 | Pending |
+| EVNT-06 | Phase 6 | Pending |
+| BOT-01 | Phase 4 | Pending |
+| BOT-02 | Phase 5 | Pending |
+| BOT-03 | Phase 4 | Pending |
+| BOT-04 | Phase 5 | Pending |
+| REG-01 | Phase 5 | Pending |
+| REG-02 | Phase 5 | Pending |
+| REG-03 | Phase 5 | Pending |
+| REG-04 | Phase 5 | Pending |
+| REG-05 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 28 total
-- Mapped to phases: 0
-- Unmapped: 28 ⚠️ (will be mapped during roadmap creation)
+- Mapped to phases: 28
+- Unmapped: 0 (complete)
 
 ---
 *Requirements defined: 2026-04-05*
-*Last updated: 2026-04-05 after initial definition*
+*Last updated: 2026-04-05 after roadmap creation — all 28 requirements mapped*
