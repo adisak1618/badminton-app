@@ -68,7 +68,9 @@ copy-paste registration templates, no manual headcount tracking.
 - **Platform**: Line Messaging API + LIFF — all member-facing interactions happen inside Line
 - **Multi-tenancy**: Data model must support multiple clubs from day 1 (Phase 2 adds public club pages)
 - **Database**: PostgreSQL (provider TBD — Neon or Railway recommended for Vercel deployment)
-- **Deployment**: Vercel — Line webhook endpoint, LIFF-served pages, and Next.js web app all on Vercel
+- **Backend**: Elysia.js (Bun runtime) as separate API service (`apps/api`) — handles Line webhook, all API routes
+- **Frontend**: Next.js for website + LIFF pages (`apps/web`)
+- **Deployment**: Vercel for both services — Elysia with Bun runtime, Next.js with Node.js runtime
 - **Auth**: Line Login for member identity; Line userId as the cross-club persistent identifier
 
 ## Key Decisions
@@ -80,6 +82,7 @@ copy-paste registration templates, no manual headcount tracking.
 | Member profile stored globally (not per-club) | Members shouldn't re-enter name/level for every club they join | — Pending |
 | Recurring events with configurable registration window | Clubs play on fixed schedules; manual creation every week is admin overhead | — Pending |
 | LIFF for all registration UI | Keeps the member flow inside Line; no need to leave the app | — Pending |
+| Elysia.js + Bun as API backend | Lightweight, type-safe framework; separate API service from Next.js frontend; deployed on Vercel with Bun runtime | — Pending |
 
 ## Evolution
 
