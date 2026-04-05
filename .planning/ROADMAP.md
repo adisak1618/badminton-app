@@ -35,7 +35,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01-PLAN.md — Create packages/db with Drizzle schema, drizzle-kit config, and generate migration SQL files
 - [x] 01-02-PLAN.md — Scaffold apps/api with Elysia webhook, signature verification, idempotency, and env validation
-- [ ] 01-03-PLAN.md — Run drizzle-kit migrate against Neon and integration tests for all INFRA requirements
+- [x] 01-03-PLAN.md — Run drizzle-kit migrate against Neon and integration tests for all INFRA requirements
 
 ### Phase 2: Club Setup
 **Goal**: A club owner can create a club on the website, add the bot to their Line group, and assign admins — the club is ready for events
