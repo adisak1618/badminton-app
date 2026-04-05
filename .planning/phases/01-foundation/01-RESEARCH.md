@@ -664,12 +664,10 @@ Step 2.5 SKIPPED — Phase 1 is greenfield. No existing data, no stored runtime 
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Elysia raw body: confirm `request.text()` works in Elysia 1.4.28 on Bun**
-   - What we know: The pattern works in Elysia 1.4.6 (Stripe webhook article). Elysia 1.4.28 is the current version (March 2026). No breaking change found in changelog between 1.4.6 and 1.4.28 affecting body stream handling.
-   - What's unclear: Whether a minor Elysia update between 1.4.6 and 1.4.28 altered stream consumption behavior.
-   - Recommendation: Write a smoke test as the first task: `POST /webhook/line` with a known-good body and signature, assert `validateSignature` succeeds. Fail fast if body is empty.
+1. **Elysia raw body: confirm `request.text()` works in Elysia 1.4.28 on Bun** -- RESOLVED
+   - Resolution: Smoke test in `apps/api/src/__tests__/webhook.test.ts` confirms `request.text()` returns the full raw body and `validateSignature` succeeds. If this breaks in a future Elysia version, the test catches it immediately.
 
 2. **Should `packages/db` use the HTTP driver or `ws` (WebSocket) driver for local development?**
    - What we know: `@neondatabase/serverless` supports both HTTP (`neon(url)`) and WebSocket (`Pool`) modes. HTTP is stateless and correct for serverless functions. WebSocket maintains a persistent connection, which is better for long-running processes (not applicable here).
