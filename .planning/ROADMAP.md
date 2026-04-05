@@ -33,9 +33,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   5. Environment variables are validated at startup via `@t3-oss/env-nextjs`; missing vars cause a descriptive startup error, not a runtime crash
 **Plans:** 3 plans
 Plans:
-- [ ] 01-01-PLAN.md — Create packages/db with Drizzle schema, Neon client, and turbo/env config
-- [ ] 01-02-PLAN.md — Scaffold apps/api with Elysia webhook, signature verification, and idempotency
-- [ ] 01-03-PLAN.md — Schema push to Neon and integration tests for all INFRA requirements
+- [ ] 01-01-PLAN.md — Create packages/db with Drizzle schema, drizzle-kit config, and generate migration SQL files
+- [ ] 01-02-PLAN.md — Scaffold apps/api with Elysia webhook, signature verification, idempotency, and env validation
+- [ ] 01-03-PLAN.md — Run drizzle-kit migrate against Neon and integration tests for all INFRA requirements
 
 ### Phase 2: Club Setup
 **Goal**: A club owner can create a club on the website, add the bot to their Line group, and assign admins — the club is ready for events
@@ -104,7 +104,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
