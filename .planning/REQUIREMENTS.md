@@ -10,8 +10,8 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Infrastructure
 
 - [ ] **INFRA-01**: Multi-tenant PostgreSQL schema with club-scoped data isolation
-- [ ] **INFRA-02**: Elysia.js API backend (apps/api) with Line webhook endpoint, raw body handling, and signature validation — deployed on Vercel with Bun runtime
-- [ ] **INFRA-03**: Webhook idempotency (deduplicate redelivered events)
+- [x] **INFRA-02**: Elysia.js API backend (apps/api) with Line webhook endpoint, raw body handling, and signature validation — deployed on Vercel with Bun runtime
+- [x] **INFRA-03**: Webhook idempotency (deduplicate redelivered events)
 - [ ] **INFRA-04**: Drizzle ORM schema with migrations for all domain tables
 
 ### Club Setup
@@ -98,8 +98,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | INFRA-01 | Phase 1 | Pending |
-| INFRA-02 | Phase 1 | Pending |
-| INFRA-03 | Phase 1 | Pending |
+| INFRA-02 | Phase 1 | Complete |
+| INFRA-03 | Phase 1 | Complete |
 | INFRA-04 | Phase 1 | Pending |
 | CLUB-01 | Phase 2 | Pending |
 | CLUB-02 | Phase 2 | Pending |
