@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-02-PLAN.md (API Webhook)
-last_updated: "2026-04-05T16:40:54.938Z"
-last_activity: 2026-04-05 -- Completed 01-02 (API Webhook)
+stopped_at: Completed 01-01-PLAN.md (database schema)
+last_updated: "2026-04-05T16:41:23.077Z"
+last_activity: 2026-04-05
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
-  percent: 33
+  completed_plans: 2
+  percent: 67
 ---
 
 # Project State
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-04-05)
 ## Current Position
 
 Phase: 1 of 6 (Foundation)
-Plan: 2 of 3 in current phase
-Status: Executing
-Last activity: 2026-04-05 -- Completed 01-02 (API Webhook)
+Plan: 3 of 3 in current phase
+Status: Ready to execute
+Last activity: 2026-04-05
 
 Progress: [███░░░░░░░] 33%
 
@@ -53,6 +53,7 @@ Progress: [███░░░░░░░] 33%
 
 *Updated after each plan completion*
 | Phase 01-foundation P02 | 2min | 2 tasks | 10 files |
+| Phase 01-foundation P01 | 3min | 1 tasks | 16 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,7 @@ Recent decisions affecting current work:
 - [Roadmap]: Vercel region should be set to `hnd1` (Tokyo) in `vercel.json` before first production deployment
 - [Phase 01-foundation]: Route uses .group('/api') prefix so lineWebhook plugin defines /webhook/line and final path is /api/webhook/line
 - [Phase 01-foundation]: No body schema on webhook route to preserve raw body stream for HMAC signature verification
+- [Phase 01-foundation]: Split schema into one file per table for maintainability; members table is global (no club_id) — members join clubs via junction table
 
 ### Pending Todos
 
@@ -79,6 +81,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-05T16:40:54.935Z
-Stopped at: Completed 01-02-PLAN.md (API Webhook)
+Last session: 2026-04-05T16:41:23.074Z
+Stopped at: Completed 01-01-PLAN.md (database schema)
 Resume file: None
