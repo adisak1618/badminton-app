@@ -31,7 +31,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Submitting the same `webhookEventId` twice does not process the second event — the idempotency key table rejects the duplicate
   4. All club-scoped queries include a `club_id` filter; a cross-tenant isolation integration test passes
   5. Environment variables are validated at startup via `@t3-oss/env-nextjs`; missing vars cause a descriptive startup error, not a runtime crash
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 01-01-PLAN.md — Create packages/db with Drizzle schema, Neon client, and turbo/env config
+- [ ] 01-02-PLAN.md — Scaffold apps/api with Elysia webhook, signature verification, and idempotency
+- [ ] 01-03-PLAN.md — Schema push to Neon and integration tests for all INFRA requirements
 
 ### Phase 2: Club Setup
 **Goal**: A club owner can create a club on the website, add the bot to their Line group, and assign admins — the club is ready for events
@@ -104,7 +108,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/3 | Planning complete | - |
 | 2. Club Setup | 0/TBD | Not started | - |
 | 3. Member Identity | 0/TBD | Not started | - |
 | 4. Event Creation | 0/TBD | Not started | - |
