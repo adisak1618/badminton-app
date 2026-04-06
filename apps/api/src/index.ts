@@ -1,4 +1,3 @@
-import { node } from "@elysiajs/node";
 import { Elysia } from "elysia";
 import { errorHandler } from "./lib/error-handler";
 // import { authMiddleware } from "./middleware/auth";
@@ -7,7 +6,7 @@ import { clubRoutes } from "./routes/clubs";
 // import { clubMemberRoutes } from "./routes/club-members";
 // import { clubLinkRoutes } from "./routes/club-link";
 
-const app = new Elysia({ adapter: node() })
+const app = new Elysia()
   .use(errorHandler)
   .get("/health", () => ({ status: "ok" }))
   .group("/api", (app) =>
