@@ -1,26 +1,42 @@
-import { describe, it, expect, beforeAll } from "bun:test";
+import { describe, it, expect, mock, beforeAll } from "bun:test";
 import { createHmac } from "crypto";
 
 // Set test env vars BEFORE importing the app (env.ts validates at import time)
-// These are set first so they win even if another test file ran first in the same worker.
-const TEST_SECRET = "test-channel-secret-for-unit-tests";
+// NOTE: Use same secret as other test files — env module is a singleton cached on first import
+const TEST_SECRET = "test-channel-secret-for-join-tests";
 process.env.LINE_CHANNEL_SECRET = TEST_SECRET;
 process.env.LINE_CHANNEL_ACCESS_TOKEN = "test-access-token";
 process.env.DATABASE_URL = process.env.DATABASE_URL || "postgresql://test:test@localhost/test";
-process.env.SESSION_SECRET = process.env.SESSION_SECRET || "test-session-secret-at-least-32-characters-long!!";
-process.env.WEB_BASE_URL = process.env.WEB_BASE_URL || "http://localhost:3000";
+process.env.SESSION_SECRET = "a-random-string-at-least-32-characters-long-for-tests";
+process.env.WEB_BASE_URL = "https://test.example.com";
+
+// Mock @line/bot-sdk so validateSignature uses this file's TEST_SECRET binding
+// (prevents cross-file env pollution when test files run in same process)
+mock.module("@line/bot-sdk", () => ({
+  validateSignature: (body: string, secret: string, signature: string) => {
+    const expected = createHmac("sha256", secret).update(body).digest("base64");
+    return expected === signature;
+  },
+  messagingApi: {
+    MessagingApiClient: class {
+      async replyMessage(_args: any) {}
+    },
+  },
+}));
+
+// Mock idempotency handler to avoid DB dependency in unit tests
+mock.module("../webhook/handlers/idempotency", () => ({
+  processWithIdempotency: async (_id: string, handler: () => Promise<void>) => {
+    await handler();
+  },
+}));
 
 // Dynamic import after env is set
 let app: any;
-let effectiveSecret: string;
 
 beforeAll(async () => {
-  const mod = await import("../index");
+  const mod = await import("../../src/index");
   app = mod.default;
-  // Import the cached env module to get the LINE_CHANNEL_SECRET that the app actually uses.
-  // This handles the case where env.ts was already loaded (module cache) with a different secret.
-  const { env } = await import("../env");
-  effectiveSecret = env.LINE_CHANNEL_SECRET;
 });
 
 function makeSignature(body: string, secret: string): string {
@@ -66,7 +82,7 @@ describe("POST /api/webhook/line (INFRA-02)", () => {
   });
 
   it("returns 200 when x-line-signature is valid (confirms request.text() works -- resolves RESEARCH Q1)", async () => {
-    const signature = makeSignature(validBody, effectiveSecret);
+    const signature = makeSignature(validBody, TEST_SECRET);
     const req = new Request("http://localhost/api/webhook/line", {
       method: "POST",
       headers: {
