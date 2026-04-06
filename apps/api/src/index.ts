@@ -16,7 +16,5 @@ const app = new Elysia()
       .use(clubRoutes)
       // .use(clubMemberRoutes)
       // .use(clubLinkRoutes)
-  );
-
-// Must use default export — NOT app.listen() — for Vercel
-export default app;
+  )
+  .listen(process.env.PORT ?? 3000);
