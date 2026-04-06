@@ -3,15 +3,19 @@ import { validateSignature } from "@line/bot-sdk";
 import type { WebhookRequestBody, WebhookEvent } from "@line/bot-sdk";
 import { env } from "../env";
 import { processWithIdempotency } from "./handlers/idempotency";
+import { handleJoinEvent } from "./handlers/join";
 
 async function handleEvent(event: WebhookEvent): Promise<void> {
   await processWithIdempotency(
     event.webhookEventId ?? `${event.type}-${event.timestamp}`,
     async () => {
-      // Event dispatch will be implemented in future phases
-      // Phase 2: join event handler
-      // Phase 4: message event handler
-      console.log(`Processing event: ${event.type}`);
+      switch (event.type) {
+        case "join":
+          await handleJoinEvent(event);
+          break;
+        default:
+          console.log(`Unhandled event type: ${event.type}`);
+      }
     }
   );
 }
