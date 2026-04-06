@@ -13,7 +13,7 @@ interface SessionData {
 
 export const authMiddleware = new Elysia({ name: "auth" })
   .derive({ as: "scoped" }, async ({ cookie }) => {
-    const sealed = cookie["badminton-session"]?.value;
+    const sealed = cookie["badminton-session"]?.value as unknown as string | undefined;
     if (!sealed) throw unauthorized("No session cookie");
 
     const session = await unsealData<SessionData>(sealed, {
