@@ -1,12 +1,17 @@
 {
   "framework": null,
   "buildCommand": "cd ../.. && turbo run build --filter=api",
-  "outputDirectory": "dist",
+  "outputDirectory": ".",
   "installCommand": "cd ../.. && pnpm install",
+  "functions": {
+    "api/index.js": {
+      "runtime": "bun@1.0.0"
+    }
+  },
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "dist/index.js"
+      "dest": "/api/index.js"
     }
   ]
 }

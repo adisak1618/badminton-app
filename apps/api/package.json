@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun run src/index.ts",
-    "build": "bun build src/index.ts --outdir dist --target=bun",
+    "build": "bun build src/index.ts --outdir api --target=bun --format=esm",
     "test": "bun test"
   },
   "dependencies": {
