@@ -8,6 +8,7 @@
     "test": "bun test"
   },
   "dependencies": {
+    "@elysiajs/node": "^1.4.5",
     "@line/bot-sdk": "^11.0.0",
     "@repo/db": "workspace:*",
     "@sinclair/typebox": "^0.34.49",
