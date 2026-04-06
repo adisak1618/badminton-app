@@ -1,1 +1,5 @@
-@import "@repo/ui/styles/globals.css";
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@repo/ui/styles/theme.css";
+
+@source "../../../packages/ui/src";
