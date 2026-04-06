@@ -3,11 +3,6 @@
   "buildCommand": "cd ../.. && turbo run build --filter=api",
   "outputDirectory": "dist",
   "installCommand": "cd ../.. && pnpm install",
-  "functions": {
-    "dist/index.js": {
-      "runtime": "bun@1.0.0"
-    }
-  },
   "routes": [
     {
       "src": "/(.*)",
