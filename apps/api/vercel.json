@@ -1,0 +1,6 @@
+{
+  "framework": null,
+  "buildCommand": "cd ../.. && turbo run build --filter=api",
+  "outputDirectory": "dist",
+  "installCommand": "cd ../.. && pnpm install"
+}
