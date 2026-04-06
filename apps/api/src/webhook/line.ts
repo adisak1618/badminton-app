@@ -1,17 +1,21 @@
 import { Elysia } from "elysia";
-import { validateSignature } from "@line/bot-sdk";
-import type { WebhookRequestBody, WebhookEvent } from "@line/bot-sdk";
+import { validateSignature, webhook } from "@line/bot-sdk";
 import { env } from "../env";
 import { processWithIdempotency } from "./handlers/idempotency";
 import { handleJoinEvent } from "./handlers/join";
 
-async function handleEvent(event: WebhookEvent): Promise<void> {
+async function handleEvent(event: webhook.Event): Promise<void> {
   await processWithIdempotency(
-    event.webhookEventId ?? `${event.type}-${event.timestamp}`,
+    event.webhookEventId,
     async () => {
       switch (event.type) {
         case "join":
-          await handleJoinEvent(event);
+          await handleJoinEvent(event as webhook.JoinEvent);
+          break;
+        case "leave":
+        case "follow":
+        case "unfollow":
+          // No action needed
           break;
         default:
           console.log(`Unhandled event type: ${event.type}`);
@@ -32,7 +36,8 @@ export const lineWebhook = new Elysia()
       return "Unauthorized";
     }
 
-    const payload = JSON.parse(rawBody) as WebhookRequestBody;
+    const payload = JSON.parse(rawBody) as webhook.CallbackRequest;
+    console.log("payload", payload);
 
     // Return 200 immediately — process events asynchronously
     // Line retries if response is delayed

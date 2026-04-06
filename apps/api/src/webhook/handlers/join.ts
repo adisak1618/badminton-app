@@ -5,7 +5,9 @@ import { env } from "../../env";
 export async function handleJoinEvent(
   event: webhook.JoinEvent
 ): Promise<void> {
-  const groupId = event.source?.groupId;
+  const source = event.source;
+  if (!source || source.type !== "group") return;
+  const groupId = (source as webhook.GroupSource).groupId;
   if (!groupId) return;
 
   const setupUrl = `${env.WEB_BASE_URL}/clubs/link?groupId=${groupId}`;
@@ -54,10 +56,15 @@ export async function handleJoinEvent(
   };
 
   // Use replyMessage (free) — replyToken is available on join events
+  // Reply can fail if bot is removed from group before reply is sent
   if (event.replyToken) {
-    await lineClient.replyMessage({
-      replyToken: event.replyToken,
-      messages: [flexMessage],
-    });
+    try {
+      await lineClient.replyMessage({
+        replyToken: event.replyToken,
+        messages: [flexMessage],
+      });
+    } catch (err) {
+      console.warn("Failed to reply on join (bot may have been removed):", (err as Error).message);
+    }
   }
 }

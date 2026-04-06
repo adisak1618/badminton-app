@@ -18,5 +18,10 @@ const app = new Elysia()
       .use(clubLinkRoutes)
   );
 
+  app.onRequest(({ request }) => {                                                                                                                                                                                                             
+    console.log(`${request.method} ${new URL(request.url).pathname}`);
+    console.log(`body: ${request.body}`)
+  })
+
 // Must use default export — NOT app.listen() — for Vercel
 export default app;
