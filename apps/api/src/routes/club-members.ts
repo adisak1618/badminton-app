@@ -3,8 +3,10 @@ import { db, clubMembers, members } from "@repo/db";
 import { eq, and } from "drizzle-orm";
 import { requireClubRole } from "../lib/require-club-role";
 import { notFound, forbidden } from "../lib/errors";
+import { authMiddleware } from "../middleware/auth";
 
 export const clubMemberRoutes = new Elysia({ prefix: "/clubs" })
+  .use(authMiddleware)
   // GET /clubs/:id/members — list members of a club
   .get(
     "/:id/members",
@@ -73,11 +75,6 @@ export const clubMemberRoutes = new Elysia({ prefix: "/clubs" })
         );
 
       if (!targetMembership) throw notFound("Member");
-
-      // Cannot promote to owner — only one owner per club
-      if (body.role === "owner") {
-        throw forbidden("Cannot promote to owner");
-      }
 
       const [updated] = await db
         .update(clubMembers)

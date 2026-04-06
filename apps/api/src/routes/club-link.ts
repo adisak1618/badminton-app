@@ -3,8 +3,10 @@ import { db, clubs, clubMembers, members } from "@repo/db";
 import { eq } from "drizzle-orm";
 import { requireClubRole } from "../lib/require-club-role";
 import { notFound, forbidden } from "../lib/errors";
+import { authMiddleware } from "../middleware/auth";
 
 export const clubLinkRoutes = new Elysia({ prefix: "/clubs" })
+  .use(authMiddleware)
   // POST /clubs/link — link a Line group to a club
   .post(
     "/link",

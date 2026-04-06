@@ -3,8 +3,10 @@ import { db, clubs, clubMembers, members } from "@repo/db";
 import { eq, and } from "drizzle-orm";
 import { requireClubRole } from "../lib/require-club-role";
 import { notFound } from "../lib/errors";
+import { authMiddleware } from "../middleware/auth";
 
 export const clubRoutes = new Elysia({ prefix: "/clubs" })
+  .use(authMiddleware)
   // POST /clubs — create a new club
   .post(
     "/",

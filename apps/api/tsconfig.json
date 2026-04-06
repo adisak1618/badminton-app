@@ -9,7 +9,7 @@
     "rootDir": "./src",
     "declaration": true,
     "skipLibCheck": true,
-    "types": ["bun-types"]
+    "types": ["@types/bun"]
   },
   "include": ["src/**/*.ts"]
 }

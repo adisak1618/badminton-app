@@ -3,7 +3,7 @@ import { unsealData } from "iron-session";
 import { env } from "../env";
 import { unauthorized } from "../lib/errors";
 
-interface SessionData {
+export interface SessionData {
   lineUserId?: string;
   memberId?: string;
   displayName?: string;
