@@ -6,6 +6,8 @@ export const env = createEnv({
     LINE_CHANNEL_SECRET: z.string().min(1),
     LINE_CHANNEL_ACCESS_TOKEN: z.string().min(1),
     DATABASE_URL: z.string().url(),
+    SESSION_SECRET: z.string().min(32),
+    WEB_BASE_URL: z.string().url(),
   },
   runtimeEnv: process.env,
 });

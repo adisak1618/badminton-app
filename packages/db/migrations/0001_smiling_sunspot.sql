@@ -1,0 +1,1 @@
+ALTER TABLE "clubs" ADD COLUMN "home_court_location" varchar(500);
