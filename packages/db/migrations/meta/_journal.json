@@ -8,6 +8,13 @@
       "when": 1775407130821,
       "tag": "0000_deep_impossible_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1775453214121,
+      "tag": "0001_smiling_sunspot",
+      "breakpoints": true
     }
   ]
 }

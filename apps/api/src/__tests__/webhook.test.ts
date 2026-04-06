@@ -2,17 +2,24 @@ import { describe, it, expect, beforeAll } from "bun:test";
 import { createHmac } from "crypto";
 
 // Set test env vars BEFORE importing the app (env.ts validates at import time)
+// Use a fixed test secret — clubs.test.ts also sets LINE_CHANNEL_SECRET to "test"
+// but bun runs test files in separate workers so module cache is isolated per file.
 const TEST_SECRET = "test-channel-secret-for-unit-tests";
 process.env.LINE_CHANNEL_SECRET = TEST_SECRET;
 process.env.LINE_CHANNEL_ACCESS_TOKEN = "test-access-token";
 process.env.DATABASE_URL = process.env.DATABASE_URL || "postgresql://test:test@localhost/test";
+process.env.SESSION_SECRET = process.env.SESSION_SECRET || "test-session-secret-at-least-32-characters-long!!";
+process.env.WEB_BASE_URL = process.env.WEB_BASE_URL || "http://localhost:3000";
 
 // Dynamic import after env is set
 let app: any;
+let effectiveSecret: string;
 
 beforeAll(async () => {
-  const mod = await import("../../src/index");
+  const mod = await import("../index");
   app = mod.default;
+  // Use the secret that env.ts actually loaded (handles module cache across test files)
+  effectiveSecret = process.env.LINE_CHANNEL_SECRET!;
 });
 
 function makeSignature(body: string, secret: string): string {
@@ -58,7 +65,7 @@ describe("POST /api/webhook/line (INFRA-02)", () => {
   });
 
   it("returns 200 when x-line-signature is valid (confirms request.text() works -- resolves RESEARCH Q1)", async () => {
-    const signature = makeSignature(validBody, TEST_SECRET);
+    const signature = makeSignature(validBody, effectiveSecret);
     const req = new Request("http://localhost/api/webhook/line", {
       method: "POST",
       headers: {

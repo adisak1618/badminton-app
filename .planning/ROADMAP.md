@@ -47,7 +47,12 @@ Plans:
   3. An authenticated owner can promote a member to Admin and demote an Admin back to member via the web dashboard
   4. An Admin can access admin functions (event creation, registration management) while a plain Member cannot
   5. Club default settings (fees, max players) pre-fill the event creation form
-**Plans**: TBD
+**Plans:** 4 plans
+Plans:
+- [ ] 02-01-PLAN.md — UI infrastructure: shadcn/ui + Tailwind v4, iron-session, Line Login OAuth, Next.js middleware
+- [ ] 02-02-PLAN.md — API: error handling, auth middleware, club CRUD routes, member role management, group linking
+- [ ] 02-03-PLAN.md — Web dashboard: club list, create, settings, members/roles, group linking pages
+- [ ] 02-04-PLAN.md — Bot join event handler: Flex Message with setup link on group join
 **UI hint**: yes
 
 ### Phase 3: Member Identity
@@ -108,8 +113,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Planning complete | - |
-| 2. Club Setup | 0/TBD | Not started | - |
+| 1. Foundation | 3/3 | Verified | 2026-04-06 |
+| 2. Club Setup | 0/4 | Planning complete | - |
 | 3. Member Identity | 0/TBD | Not started | - |
 | 4. Event Creation | 0/TBD | Not started | - |
 | 5. Registration Loop | 0/TBD | Not started | - |
