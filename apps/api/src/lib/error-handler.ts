@@ -13,11 +13,11 @@ export const errorHandler = new Elysia({ name: "error-handler" })
     }
 
     // Handle Elysia validation errors
-    if (error.constructor.name === "ValidationError") {
+    if ("message" in error && error.constructor.name === "ValidationError") {
       set.status = 422;
       return {
         error: "VALIDATION_ERROR",
-        message: error.message,
+        message: (error as Error).message,
       };
     }
 
