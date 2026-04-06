@@ -10,9 +10,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/ca
 
 const clubSchema = z.object({
   name: z.string().min(1, "Club name is required").max(255),
-  defaultMaxPlayers: z.coerce.number().int().min(1).default(20),
-  defaultShuttlecockFee: z.coerce.number().int().min(0).default(0),
-  defaultCourtFee: z.coerce.number().int().min(0).default(0),
+  defaultMaxPlayers: z.number().int().min(1),
+  defaultShuttlecockFee: z.number().int().min(0),
+  defaultCourtFee: z.number().int().min(0),
 });
 
 type ClubFormData = z.infer<typeof clubSchema>;
@@ -70,7 +70,7 @@ export function ClubForm({
               id="defaultMaxPlayers"
               type="number"
               min={1}
-              {...register("defaultMaxPlayers")}
+              {...register("defaultMaxPlayers", { valueAsNumber: true })}
             />
             {errors.defaultMaxPlayers && (
               <p className="text-sm text-destructive">
@@ -87,7 +87,7 @@ export function ClubForm({
               id="defaultShuttlecockFee"
               type="number"
               min={0}
-              {...register("defaultShuttlecockFee")}
+              {...register("defaultShuttlecockFee", { valueAsNumber: true })}
             />
             {errors.defaultShuttlecockFee && (
               <p className="text-sm text-destructive">
@@ -102,7 +102,7 @@ export function ClubForm({
               id="defaultCourtFee"
               type="number"
               min={0}
-              {...register("defaultCourtFee")}
+              {...register("defaultCourtFee", { valueAsNumber: true })}
             />
             {errors.defaultCourtFee && (
               <p className="text-sm text-destructive">
