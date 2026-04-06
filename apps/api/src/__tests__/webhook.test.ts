@@ -2,8 +2,7 @@ import { describe, it, expect, beforeAll } from "bun:test";
 import { createHmac } from "crypto";
 
 // Set test env vars BEFORE importing the app (env.ts validates at import time)
-// Use a fixed test secret — clubs.test.ts also sets LINE_CHANNEL_SECRET to "test"
-// but bun runs test files in separate workers so module cache is isolated per file.
+// These are set first so they win even if another test file ran first in the same worker.
 const TEST_SECRET = "test-channel-secret-for-unit-tests";
 process.env.LINE_CHANNEL_SECRET = TEST_SECRET;
 process.env.LINE_CHANNEL_ACCESS_TOKEN = "test-access-token";
@@ -18,8 +17,10 @@ let effectiveSecret: string;
 beforeAll(async () => {
   const mod = await import("../index");
   app = mod.default;
-  // Use the secret that env.ts actually loaded (handles module cache across test files)
-  effectiveSecret = process.env.LINE_CHANNEL_SECRET!;
+  // Import the cached env module to get the LINE_CHANNEL_SECRET that the app actually uses.
+  // This handles the case where env.ts was already loaded (module cache) with a different secret.
+  const { env } = await import("../env");
+  effectiveSecret = env.LINE_CHANNEL_SECRET;
 });
 
 function makeSignature(body: string, secret: string): string {
