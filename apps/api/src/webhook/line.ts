@@ -3,6 +3,7 @@ import { validateSignature, webhook } from "@line/bot-sdk";
 import { env } from "../env";
 import { processWithIdempotency } from "./handlers/idempotency";
 import { handleJoinEvent } from "./handlers/join";
+import { handleTextMessage } from "./handlers/text-message";
 
 async function handleEvent(event: webhook.Event): Promise<void> {
   await processWithIdempotency(
@@ -11,6 +12,9 @@ async function handleEvent(event: webhook.Event): Promise<void> {
       switch (event.type) {
         case "join":
           await handleJoinEvent(event as webhook.JoinEvent);
+          break;
+        case "message":
+          await handleTextMessage(event as webhook.MessageEvent);
           break;
         case "leave":
         case "follow":
