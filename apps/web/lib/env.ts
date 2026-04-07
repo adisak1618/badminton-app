@@ -10,5 +10,8 @@ export const env = createEnv({
     API_BASE_URL: z.string().url(),
     APP_URL: z.string().url(),
   },
+  client: {
+    NEXT_PUBLIC_LIFF_ID: z.string().min(1),
+  },
   experimental__runtimeEnv: process.env,
 });

@@ -6,6 +6,7 @@ import { lineWebhook } from "./webhook/line";
 import { clubRoutes } from "./routes/clubs";
 import { clubMemberRoutes } from "./routes/club-members";
 import { clubLinkRoutes } from "./routes/club-link";
+import { liffProfileRoutes } from "./routes/liff-profile";
 
 const app = new Elysia()
   .use(openapi())
@@ -18,5 +19,8 @@ const app = new Elysia()
       .use(clubRoutes)
       .use(clubMemberRoutes)
       .use(clubLinkRoutes)
+      .use(liffProfileRoutes)
   )
   .listen(process.env.PORT ?? 3000);
+
+export default app;
