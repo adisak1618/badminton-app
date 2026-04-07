@@ -8,6 +8,7 @@ interface Club {
   id: string;
   name: string;
   defaultMaxPlayers: number;
+  homeCourtLocation: string;
   defaultShuttlecockFee: number;
   defaultCourtFee: number;
 }
@@ -42,7 +43,9 @@ export default function ClubSettingsPage() {
     });
 
     if (!res.ok) {
-      const error = await res.json().catch(() => ({ message: "Failed to update" }));
+      const error = await res
+        .json()
+        .catch(() => ({ message: "Failed to update" }));
       throw new Error(error.message);
     }
 
@@ -67,6 +70,7 @@ export default function ClubSettingsPage() {
           name: club.name,
           defaultMaxPlayers: club.defaultMaxPlayers,
           defaultShuttlecockFee: club.defaultShuttlecockFee,
+          homeCourtLocation: club.homeCourtLocation,
           defaultCourtFee: club.defaultCourtFee,
         }}
         onSubmit={handleSubmit}
