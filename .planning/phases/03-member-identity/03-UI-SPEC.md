@@ -1,7 +1,8 @@
 ---
 phase: 3
 slug: member-identity
-status: draft
+status: approved
+reviewed_at: 2026-04-07
 shadcn_initialized: true
 preset: "new-york / neutral / css-variables"
 created: 2026-04-07
