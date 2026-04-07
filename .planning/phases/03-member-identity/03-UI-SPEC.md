@@ -55,15 +55,17 @@ Source: existing layout pattern from `apps/web/app/layout.tsx` (max-w-5xl) overr
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
 | Body | 16px (text-base) | 400 (normal) | 1.5 |
-| Label | 14px (text-sm) | 500 (medium) | 1.4 |
+| Label | 14px (text-sm) | 400 (normal) | 1.4 |
 | Heading | 24px (text-2xl) | 700 (bold) | 1.2 |
-| Display | 20px (text-xl) | 600 (semibold) | 1.3 |
+| Display | 20px (text-xl) | 700 (bold) | 1.3 |
 
 Notes:
 - Heading (24px bold) is used for page titles: "Set Up Your Profile", "Edit Profile".
-- Display (20px semibold) is used for card titles and section headers within the profile form.
-- Label (14px medium) is used for form field labels (shadcn Label component).
+- Display (20px bold) is used for card titles and section headers within the profile form.
+- Label (14px normal) is used for form field labels (shadcn Label component).
 - Body (16px normal) is used for input text, descriptive copy, and error messages.
+
+Weights in use: 400 (normal) and 700 (bold) only — maximum 2 weights enforced.
 
 Source: `apps/web/app/clubs/page.tsx` (`text-2xl font-bold`), `apps/web/components/club-form.tsx` (Label, Input pattern).
 
@@ -79,7 +81,7 @@ Source: `apps/web/app/clubs/page.tsx` (`text-2xl font-bold`), `apps/web/componen
 | Destructive | `var(--destructive)` oklch(0.577 0.245 27.325) = red | Inline field validation errors only |
 
 Accent reserved for:
-- Primary submit button ("Save Profile", "Continue")
+- Primary submit button ("Set Up Profile", "Save Changes")
 - Focused input ring (`var(--ring)`)
 
 No other elements use the accent color. Muted foreground (`var(--muted-foreground)` oklch(0.556 0 0)) is used for placeholder text and hint copy — it is NOT accent.
@@ -119,6 +121,8 @@ Source: `packages/ui/src/styles/globals.css` (CSS custom properties).
    - Skill Level (Select with 4 options: Beginner / Intermediate / Advanced / Competitive, required)
    - Years Playing (Input type="number" min=0, required)
 5. Primary CTA button full-width at bottom of form
+
+**Focal point:** Primary visual anchor is the full-width "Set Up Profile" CTA button at the bottom of the card.
 
 **Interaction contract:**
 - Display Name: pre-filled on mount from LINE token `name`. Editable.
@@ -175,7 +179,7 @@ No new shadcn components need to be installed for this phase.
 
 | Element | Copy |
 |---------|------|
-| Primary CTA — setup | "Continue" |
+| Primary CTA — setup | "Set Up Profile" |
 | Primary CTA — edit | "Save Changes" |
 | In-flight button label | "Saving..." |
 | Setup page heading | "Set Up Your Profile" |
