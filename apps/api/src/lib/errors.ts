@@ -16,3 +16,6 @@ export const forbidden = (msg = "Forbidden") =>
 
 export const unauthorized = (msg = "Unauthorized") =>
   new ApiError(401, "UNAUTHORIZED", msg);
+
+export const unprocessableEntity = (msg: string) =>
+  new ApiError(422, "UNPROCESSABLE_ENTITY", msg);
