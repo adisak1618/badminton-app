@@ -12,9 +12,12 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@line/liff": "^2.28.0",
+    "@repo/db": "workspace:*",
     "@repo/ui": "workspace:*",
     "@t3-oss/env-nextjs": "^0.13.11",
     "@tailwindcss/postcss": "^4.2.2",
+    "drizzle-orm": "^0.45.2",
     "iron-session": "^8.0.4",
     "next": "16.2.0",
     "next-themes": "^0.4.6",
