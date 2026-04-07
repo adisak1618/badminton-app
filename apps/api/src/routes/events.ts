@@ -83,8 +83,8 @@ export const eventRoutes = new Elysia({ prefix: "/events" })
 
       // Build LIFF URLs for card buttons
       const liffBase = `https://liff.line.me/${env.LIFF_ID}`;
-      const registerLiffUrl = `${liffBase}/liff/events/${created.id}/register`;
-      const detailsLiffUrl = `${liffBase}/liff/events/${created.id}`;
+      const registerLiffUrl = `${liffBase}/events/${created.id}/register`;
+      const detailsLiffUrl = `${liffBase}/events/${created.id}`;
 
       // Build and push Flex Message card (BOT-01)
       const flexCard = buildEventFlexCard({

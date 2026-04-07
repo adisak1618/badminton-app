@@ -35,7 +35,7 @@ export async function handleTextMessage(event: webhook.MessageEvent): Promise<vo
   if (!result || !["owner", "admin"].includes(result.role)) return;
 
   // Build LIFF deep-link URL with clubId
-  const liffUrl = `https://liff.line.me/${env.LIFF_ID}?path=/liff/events/create&clubId=${result.clubId}`;
+  const liffUrl = `https://liff.line.me/${env.LIFF_ID}/events/create?clubId=${result.clubId}`;
 
   await lineClient.replyMessage({
     replyToken: event.replyToken!,

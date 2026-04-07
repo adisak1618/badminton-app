@@ -133,7 +133,7 @@ describe("Bot text message handler - BOT-03", () => {
     expect(callArgs.messages[0].type).toBe("text");
 
     const replyText: string = callArgs.messages[0].text;
-    expect(replyText).toContain(`https://liff.line.me/${TEST_LIFF_ID}?path=/liff/events/create&clubId=test-club-id`);
+    expect(replyText).toContain(`https://liff.line.me/${TEST_LIFF_ID}/events/create?clubId=test-club-id`);
   });
 
   it("Test 2: Admin sending สร้าง receives the same LIFF link reply", async () => {
@@ -144,7 +144,7 @@ describe("Bot text message handler - BOT-03", () => {
     expect(replyMessageSpy).toHaveBeenCalledTimes(1);
     const callArgs = replyMessageSpy.mock.calls[0][0];
     const replyText: string = callArgs.messages[0].text;
-    expect(replyText).toContain(`https://liff.line.me/${TEST_LIFF_ID}?path=/liff/events/create&clubId=test-club-id`);
+    expect(replyText).toContain(`https://liff.line.me/${TEST_LIFF_ID}/events/create?clubId=test-club-id`);
   });
 
   it("Test 3: Admin sending สร้างอีเวนท์ receives the same LIFF link reply", async () => {
@@ -155,7 +155,7 @@ describe("Bot text message handler - BOT-03", () => {
     expect(replyMessageSpy).toHaveBeenCalledTimes(1);
     const callArgs = replyMessageSpy.mock.calls[0][0];
     const replyText: string = callArgs.messages[0].text;
-    expect(replyText).toContain(`https://liff.line.me/${TEST_LIFF_ID}?path=/liff/events/create&clubId=test-club-id`);
+    expect(replyText).toContain(`https://liff.line.me/${TEST_LIFF_ID}/events/create?clubId=test-club-id`);
   });
 
   it("Test 4: Admin sending /new receives the same LIFF link reply", async () => {
@@ -166,7 +166,7 @@ describe("Bot text message handler - BOT-03", () => {
     expect(replyMessageSpy).toHaveBeenCalledTimes(1);
     const callArgs = replyMessageSpy.mock.calls[0][0];
     const replyText: string = callArgs.messages[0].text;
-    expect(replyText).toContain(`https://liff.line.me/${TEST_LIFF_ID}?path=/liff/events/create&clubId=test-club-id`);
+    expect(replyText).toContain(`https://liff.line.me/${TEST_LIFF_ID}/events/create?clubId=test-club-id`);
   });
 
   it("Test 5: Non-admin member sending /create gets NO replyMessage call (D-03 silent ignore)", async () => {
@@ -209,7 +209,7 @@ describe("Bot text message handler - BOT-03", () => {
     expect(replyMessageSpy).toHaveBeenCalledTimes(1);
     const callArgs = replyMessageSpy.mock.calls[0][0];
     const replyText: string = callArgs.messages[0].text;
-    expect(replyText).toContain(`https://liff.line.me/${TEST_LIFF_ID}?path=/liff/events/create&clubId=test-club-id`);
+    expect(replyText).toContain(`https://liff.line.me/${TEST_LIFF_ID}/events/create?clubId=test-club-id`);
   });
 
   it("Owner sending /create also receives the LIFF link reply", async () => {
