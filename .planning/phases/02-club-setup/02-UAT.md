@@ -26,9 +26,7 @@ result: pass
 
 ### 4. Create a Club
 expected: Navigate to /clubs/create. Fill in club name, home court/location, default shuttlecock fee, default court fee, and default max players. Submit the form. You are redirected to /clubs and the new club appears in the list with an "Owner" role badge.
-result: issue
-reported: "home court/location missing in create form"
-severity: major
+result: pass (fixed in a0fc08b)
 
 ### 5. View Club List
 expected: Navigate to /clubs. All clubs you belong to are listed with their name, your role badge (Owner/Admin/Member), and linked/not-linked status. If no clubs exist, an empty state with a "Create Club" CTA is shown.
@@ -57,8 +55,8 @@ result: pass
 ## Summary
 
 total: 10
-passed: 9
-issues: 1
+passed: 10
+issues: 0
 pending: 0
 skipped: 0
 blocked: 0
@@ -70,7 +68,11 @@ blocked: 0
   reason: "User reported: home court/location missing in create form"
   severity: major
   test: 4
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "club-form.tsx Zod schema and JSX missing homeCourtLocation field — DB column and API endpoint both support it but the form was never wired up"
+  artifacts:
+    - path: "apps/web/components/club-form.tsx"
+      issue: "Zod schema missing homeCourtLocation; no input field in JSX"
+  missing:
+    - "Add homeCourtLocation: z.string().max(500).optional() to clubSchema"
+    - "Add Input field for homeCourtLocation in the form JSX after name field"
   debug_session: ""
