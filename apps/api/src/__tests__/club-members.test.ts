@@ -7,6 +7,7 @@ process.env.SESSION_SECRET = "test-session-secret-at-least-32-characters-long!!"
 process.env.WEB_BASE_URL = "http://localhost:3000";
 process.env.LINE_CHANNEL_SECRET = process.env.LINE_CHANNEL_SECRET || "test-secret";
 process.env.LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN || "test-token";
+process.env.LINE_LOGIN_CHANNEL_ID = process.env.LINE_LOGIN_CHANNEL_ID || "test-login-channel-id";
 process.env.DATABASE_URL = process.env.DATABASE_URL || "postgresql://test:test@localhost/test";
 
 let app: any;

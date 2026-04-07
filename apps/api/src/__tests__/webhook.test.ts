@@ -3,9 +3,9 @@ import { createHmac } from "crypto";
 
 // Set test env vars BEFORE importing the app (env.ts validates at import time)
 // NOTE: Use same secret as other test files — env module is a singleton cached on first import
-const TEST_SECRET = "test-channel-secret-for-join-tests";
-process.env.LINE_CHANNEL_SECRET = TEST_SECRET;
+process.env.LINE_CHANNEL_SECRET = process.env.LINE_CHANNEL_SECRET || "test-secret";
 process.env.LINE_CHANNEL_ACCESS_TOKEN = "test-access-token";
+process.env.LINE_LOGIN_CHANNEL_ID = process.env.LINE_LOGIN_CHANNEL_ID || "test-login-channel-id";
 process.env.DATABASE_URL = process.env.DATABASE_URL || "postgresql://test:test@localhost/test";
 process.env.SESSION_SECRET = "a-random-string-at-least-32-characters-long-for-tests";
 process.env.WEB_BASE_URL = "https://test.example.com";
@@ -82,7 +82,7 @@ describe("POST /api/webhook/line (INFRA-02)", () => {
   });
 
   it("returns 200 when x-line-signature is valid (confirms request.text() works -- resolves RESEARCH Q1)", async () => {
-    const signature = makeSignature(validBody, TEST_SECRET);
+    const signature = makeSignature(validBody, process.env.LINE_CHANNEL_SECRET!);
     const req = new Request("http://localhost/api/webhook/line", {
       method: "POST",
       headers: {
