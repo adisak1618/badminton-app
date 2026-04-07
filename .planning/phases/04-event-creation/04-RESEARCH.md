@@ -541,22 +541,25 @@ if (!result || !["owner", "admin"].includes(result.role)) return; // D-03: silen
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **LIFF_ID env var in API app**
    - What we know: `apps/web` uses `NEXT_PUBLIC_LIFF_ID`. The text-message webhook handler needs to build a LIFF deep-link URL, which requires the LIFF ID.
    - What's unclear: Is `LIFF_ID` (non-public) already in `apps/api/.env`? Or does only `apps/web` have it?
    - Recommendation: Wave 0 task should check `apps/api/src/env.ts` and add `LIFF_ID` env var if missing.
+   - **RESOLVED:** Plan 04-01 Task 1 Step 1 adds `LIFF_ID: z.string().min(1)` to `apps/api/src/env.ts` server block.
 
 2. **clubs.homeCourtLocation vs venueName for defaults**
    - What we know: `clubs.homeCourtLocation` stores a string (up to 500 chars). CONTEXT.md D-06 says venue name defaults from club settings. The schema does not have a separate `defaultVenueName` field.
    - What's unclear: Should the default venue name be pre-filled from `clubs.homeCourtLocation`?
    - Recommendation: Yes — use `homeCourtLocation` as the default venue name pre-fill. It's the only venue-related field in the clubs schema.
+   - **RESOLVED:** Plan 04-02 Task 1 Step 3 maps `clubs.homeCourtLocation` to `venueName` in GET /events/club-defaults response. Plan 04-03 Task 1 pre-fills form venueName from this field.
 
 3. **`venueMapsUrl` default**
    - What we know: D-06 says venue maps URL defaults from club settings, but `clubs` schema has no `defaultVenueMapsUrl` field — only `homeCourtLocation`.
    - What's unclear: Is the maps URL expected to be a separate default in the clubs schema, or was this an oversight?
    - Recommendation: Treat `venueMapsUrl` as optional/blank by default (no club-level default available). Planner should note this gap — a migration adding `defaultVenueMapsUrl` to clubs table may be needed, or omit from defaults.
+   - **RESOLVED:** Plans treat `venueMapsUrl` as optional with no club-level default. Plan 04-03 form leaves the field blank; Plan 04-02 POST /events accepts it as `t.Optional`. No schema migration needed for Phase 4.
 
 ---
 
