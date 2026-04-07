@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "bun run src/index.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "test:local": "bun --env-file=.env.local test"
   },
   "dependencies": {
     "@elysiajs/node": "^1.4.5",
