@@ -64,7 +64,10 @@ Plans:
   2. A first-time member is redirected to a profile setup screen and cannot proceed until they enter display name, skill level, and years playing — the record is saved to the global `members` table
   3. The same member profile (name, skill level) appears regardless of which club's LIFF they access — profile is keyed by Line userId, not by club
   4. A member can update their display name, skill level, and years playing at any time via the LIFF profile page — changes persist immediately
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 03-01-PLAN.md — LIFF auth endpoint, profile API routes, LiffProvider component, integration tests
+- [ ] 03-02-PLAN.md — LIFF UI pages: layout, entry, profile setup, profile edit, shared form
 **UI hint**: yes
 
 ### Phase 4: Event Creation
@@ -115,7 +118,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Verified | 2026-04-06 |
 | 2. Club Setup | 0/4 | Planning complete | - |
-| 3. Member Identity | 0/TBD | Not started | - |
+| 3. Member Identity | 0/2 | Planning complete | - |
 | 4. Event Creation | 0/TBD | Not started | - |
 | 5. Registration Loop | 0/TBD | Not started | - |
 | 6. Recurring Events | 0/TBD | Not started | - |
