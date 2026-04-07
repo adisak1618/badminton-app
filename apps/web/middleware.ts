@@ -18,7 +18,8 @@ export async function middleware(request: NextRequest) {
 
   if (!session.isLoggedIn) {
     const loginUrl = new URL("/api/auth/login/line", request.url);
-    loginUrl.searchParams.set("returnTo", pathname);
+    const returnTo = request.nextUrl.search ? `${pathname}${request.nextUrl.search}` : pathname;
+    loginUrl.searchParams.set("returnTo", returnTo);
     return NextResponse.redirect(loginUrl);
   }
 
