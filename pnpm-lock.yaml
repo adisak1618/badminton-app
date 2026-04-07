@@ -23,6 +23,9 @@ importers:
       '@elysiajs/node':
         specifier: ^1.4.5
         version: 1.4.5(elysia@1.4.28(@sinclair/typebox@0.34.49)(@types/bun@1.3.11)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.2))
+      '@elysiajs/openapi':
+        specifier: ^1.4.14
+        version: 1.4.14(elysia@1.4.28(@sinclair/typebox@0.34.49)(@types/bun@1.3.11)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.2))
       '@line/bot-sdk':
         specifier: ^11.0.0
         version: 11.0.0
@@ -269,6 +272,11 @@ packages:
 
   '@elysiajs/node@1.4.5':
     resolution: {integrity: sha512-K58HEre7RQWZOkLcMNl2RFnuZFzmUUyxHRBSfC2XaJz4j2AjrpHKu/f26tN9LRi3nx1L0PbH22vgZ4O2Fqppbw==}
+    peerDependencies:
+      elysia: '>= 1.4.0'
+
+  '@elysiajs/openapi@1.4.14':
+    resolution: {integrity: sha512-kWmJWdvP8/LwHwAJXSpz6xFfYUoyUyEPRimEYABuDU1rOnS27Da1u9T2jyU7frOopxKWV/wDfDxMP8z2xdCPJw==}
     peerDependencies:
       elysia: '>= 1.4.0'
 
@@ -3454,6 +3462,10 @@ snapshots:
       crossws: 0.4.4(srvx@0.11.15)
       elysia: 1.4.28(@sinclair/typebox@0.34.49)(@types/bun@1.3.11)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.2)
       srvx: 0.11.15
+
+  '@elysiajs/openapi@1.4.14(elysia@1.4.28(@sinclair/typebox@0.34.49)(@types/bun@1.3.11)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.2))':
+    dependencies:
+      elysia: 1.4.28(@sinclair/typebox@0.34.49)(@types/bun@1.3.11)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.2)
 
   '@emnapi/runtime@1.7.1':
     dependencies:
