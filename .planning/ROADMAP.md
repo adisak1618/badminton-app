@@ -78,8 +78,8 @@ Plans:
   4. The event record stores the posted message ID as reference metadata; no code attempts to edit the message after posting
 **Plans:** 3 plans
 Plans:
-- [ ] 04-01-PLAN.md — Webhook text-message handler for bot commands (/create, /new, Thai aliases) with role check
-- [ ] 04-02-PLAN.md — Event API routes (POST /events, GET /events/club-defaults) with Flex Message card builder and push
+- [x] 04-01-PLAN.md — Webhook text-message handler for bot commands (/create, /new, Thai aliases) with role check
+- [x] 04-02-PLAN.md — Event API routes (POST /events, GET /events/club-defaults) with Flex Message card builder and push
 - [ ] 04-03-PLAN.md — LIFF event creation form page with club defaults pre-fill, validation, and schema push
 **UI hint**: yes
 
