@@ -37,6 +37,14 @@ Design contracts for both surfaces are declared below.
 
 ---
 
+## Visuals
+
+Primary focal point: the "สร้างอีเวนท์" submit button at the bottom of the form — it is the sole accent-colored (`--primary`) element on the page and anchors the user's eye as the terminal action.
+
+All other form elements (labels, inputs, card container) use neutral surface colors to keep visual weight concentrated on the submit action.
+
+---
+
 ## Spacing Scale
 
 Declared values (must be multiples of 4):
@@ -64,9 +72,11 @@ Source: Established patterns from `apps/web/app/liff/profile/page.tsx` and `apps
 | Role | Size | Weight | Line Height | Usage |
 |------|------|--------|-------------|-------|
 | Body | 16px (text-base) | 400 (regular) | 1.5 | Form field input text, descriptive copy |
-| Label | 14px (text-sm) | 500 (medium) | 1.5 | Form field labels via `<Label>` component |
+| Label | 14px (text-sm) | 400 (regular) | 1.5 | Form field labels via `<Label>` component |
 | Heading | 24px (text-2xl) | 700 (bold) | 1.2 | Page heading (`h1`) on LIFF form page |
 | Caption / Muted | 14px (text-sm) | 400 (regular) | 1.5 | Error messages, helper text, muted-foreground |
+
+Declared weights: 400 (regular) and 700 (bold) — maximum 2 weights. Labels are visually distinguished from body copy by size (14px vs 16px), not weight.
 
 Source: Established from `apps/web/app/liff/profile/page.tsx` — `text-2xl font-bold` heading, shadcn `<Label>` for labels, `text-sm text-destructive` for errors.
 
