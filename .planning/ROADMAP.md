@@ -76,7 +76,11 @@ Plans:
   2. An admin can create a one-time event via the LIFF admin panel with the same fields — club defaults pre-fill the form
   3. After event creation, the bot posts a Flex Message card to the Line group showing event info, current/max count (0/max), a "Register" CTA button, and a "Details" CTA button
   4. The event record stores the posted message ID as reference metadata; no code attempts to edit the message after posting
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 04-01-PLAN.md — Webhook text-message handler for bot commands (/create, /new, Thai aliases) with role check
+- [ ] 04-02-PLAN.md — Event API routes (POST /events, GET /events/club-defaults) with Flex Message card builder and push
+- [ ] 04-03-PLAN.md — LIFF event creation form page with club defaults pre-fill, validation, and schema push
 **UI hint**: yes
 
 ### Phase 5: Registration Loop
@@ -116,6 +120,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 1. Foundation | 3/3 | Verified | 2026-04-06 |
 | 2. Club Setup | 0/4 | Planning complete | - |
 | 3. Member Identity | 0/TBD | Not started | - |
-| 4. Event Creation | 0/TBD | Not started | - |
+| 4. Event Creation | 0/3 | Planning complete | - |
 | 5. Registration Loop | 0/TBD | Not started | - |
 | 6. Recurring Events | 0/TBD | Not started | - |
