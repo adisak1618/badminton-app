@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,6 +21,20 @@ interface ClubDefaults {
 }
 
 export default function LiffEventCreatePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" aria-label="Loading" />
+        </div>
+      }
+    >
+      <LiffEventCreateForm />
+    </Suspense>
+  );
+}
+
+function LiffEventCreateForm() {
   const { liff, isReady, isLoggedIn } = useLiff();
   const searchParams = useSearchParams();
   const clubId = searchParams.get("clubId");
