@@ -56,7 +56,9 @@ export async function GET(request: NextRequest) {
   session.isLoggedIn = true;
   session.oauthState = undefined;
   session.oauthNonce = undefined;
+  const redirectTo = session.returnTo || "/clubs";
+  session.returnTo = undefined;
   await session.save();
 
-  return NextResponse.redirect(new URL("/clubs", env.APP_URL));
+  return NextResponse.redirect(new URL(redirectTo, env.APP_URL));
 }

@@ -8,6 +8,7 @@ export interface SessionData {
   isLoggedIn: boolean;
   oauthState?: string;
   oauthNonce?: string;
+  returnTo?: string;
 }
 
 export const defaultSession: SessionData = { isLoggedIn: false };
