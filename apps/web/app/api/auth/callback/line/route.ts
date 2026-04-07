@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
   if (!code || !state || state !== session.oauthState) {
-    return NextResponse.redirect(new URL("/?error=invalid_state", request.url));
+    return NextResponse.redirect(new URL("/?error=invalid_state", env.APP_URL));
   }
 
   // Exchange code for tokens
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
   });
 
   if (!tokenRes.ok) {
-    return NextResponse.redirect(new URL("/?error=token_exchange_failed", request.url));
+    return NextResponse.redirect(new URL("/?error=token_exchange_failed", env.APP_URL));
   }
 
   const tokenData = await tokenRes.json();
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
   });
 
   if (!verifyRes.ok) {
-    return NextResponse.redirect(new URL("/?error=id_token_verification_failed", request.url));
+    return NextResponse.redirect(new URL("/?error=id_token_verification_failed", env.APP_URL));
   }
 
   const profile = await verifyRes.json();
@@ -58,5 +58,5 @@ export async function GET(request: NextRequest) {
   session.oauthNonce = undefined;
   await session.save();
 
-  return NextResponse.redirect(new URL("/clubs", request.url));
+  return NextResponse.redirect(new URL("/clubs", env.APP_URL));
 }

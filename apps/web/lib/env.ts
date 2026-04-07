@@ -8,6 +8,7 @@ export const env = createEnv({
     LINE_LOGIN_CALLBACK_URL: z.string().url(),
     SESSION_SECRET: z.string().min(32),
     API_BASE_URL: z.string().url(),
+    APP_URL: z.string().url(),
   },
   experimental__runtimeEnv: process.env,
 });
