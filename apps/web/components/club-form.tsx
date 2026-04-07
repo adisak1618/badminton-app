@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/ca
 
 const clubSchema = z.object({
   name: z.string().min(1, "Club name is required").max(255),
+  homeCourtLocation: z.string().max(500).optional(),
   defaultMaxPlayers: z.number().int().min(1),
   defaultShuttlecockFee: z.number().int().min(0),
   defaultCourtFee: z.number().int().min(0),
@@ -38,6 +39,7 @@ export function ClubForm({
     resolver: zodResolver(clubSchema),
     defaultValues: {
       name: "",
+      homeCourtLocation: "",
       defaultMaxPlayers: 20,
       defaultShuttlecockFee: 0,
       defaultCourtFee: 0,
@@ -61,6 +63,20 @@ export function ClubForm({
             />
             {errors.name && (
               <p className="text-sm text-destructive">{errors.name.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="homeCourtLocation">Home Court / Location</Label>
+            <Input
+              id="homeCourtLocation"
+              placeholder="e.g., Bangkok Sports Complex, Court A"
+              {...register("homeCourtLocation")}
+            />
+            {errors.homeCourtLocation && (
+              <p className="text-sm text-destructive">
+                {errors.homeCourtLocation.message}
+              </p>
             )}
           </div>
 
