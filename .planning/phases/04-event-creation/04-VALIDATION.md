@@ -1,9 +1,9 @@
 ---
 phase: 4
 slug: event-creation
-status: draft
-nyquist_compliant: false
-wave_0_complete: false
+status: verified
+nyquist_compliant: true
+wave_0_complete: true
 created: 2026-04-08
 ---
 
@@ -19,9 +19,9 @@ created: 2026-04-08
 |----------|-------|
 | **Framework** | bun:test (vitest-compatible) |
 | **Config file** | apps/api/src/__tests__/ (existing pattern) |
-| **Quick run command** | `cd apps/api && bun test` |
-| **Full suite command** | `cd apps/api && bun test` |
-| **Estimated runtime** | ~5 seconds |
+| **Quick run command** | `cd apps/api && bun test src/__tests__/text-message.test.ts` |
+| **Full suite command** | `set -a && source .env.local && set +a && bun test` |
+| **Estimated runtime** | ~3 seconds per file |
 
 ---
 
@@ -36,42 +36,78 @@ created: 2026-04-08
 
 ## Per-Task Verification Map
 
-| Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
-|---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 04-01-01 | 01 | 1 | EVNT-01 | — | N/A | unit | `cd apps/api && bun test` | ❌ W0 | ⬜ pending |
-| 04-01-02 | 01 | 1 | EVNT-02 | — | N/A | unit | `cd apps/api && bun test` | ❌ W0 | ⬜ pending |
-| 04-02-01 | 02 | 1 | BOT-01 | — | N/A | unit | `cd apps/api && bun test` | ❌ W0 | ⬜ pending |
-| 04-02-02 | 02 | 1 | BOT-03 | — | N/A | unit | `cd apps/api && bun test` | ❌ W0 | ⬜ pending |
+| Task ID | Plan | Wave | Requirement | Test File | Test Count | Status |
+|---------|------|------|-------------|-----------|------------|--------|
+| 04-01-01 | 01 | 1 | BOT-03 | text-message.test.ts | 10 | ✅ green |
+| 04-02-01 | 02 | 1 | EVNT-01 | events.test.ts | 5 | ✅ green |
+| 04-02-02 | 02 | 1 | EVNT-02 | events.test.ts | 2 | ✅ green |
+| 04-02-03 | 02 | 1 | BOT-01 | events.test.ts | 3 | ✅ green |
+| 04-03-01 | 03 | 2 | EVNT-01, EVNT-02 | (LIFF page — manual) | — | ✅ UAT passed |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
 ---
 
-## Wave 0 Requirements
+## Test Details
 
-- [ ] `apps/api/src/__tests__/events.test.ts` — stubs for EVNT-01, EVNT-02
-- [ ] `apps/api/src/__tests__/bot-event-post.test.ts` — stubs for BOT-01, BOT-03
+### text-message.test.ts (BOT-03) — 10 tests
+- Admin /create → LIFF link reply with clubId
+- Admin สร้าง → same LIFF link
+- Admin สร้างอีเวนท์ → same LIFF link
+- Admin /new → same LIFF link
+- Non-admin /create → silent ignore (D-03)
+- Unknown user /create → no reply
+- Unlinked group /create → no reply
+- Non-command text → no reply
+- Trailing whitespace trim → still triggers
+- Owner /create → LIFF link reply
 
-*Existing test infrastructure (bun:test, treaty client) covers framework needs.*
+### events.test.ts (EVNT-01, EVNT-02, BOT-01) — 10 tests
+- GET club-defaults → returns defaults for admin
+- GET club-defaults → 403 for non-admin
+- POST events → creates with status=open, returns 201
+- POST events → calls pushMessage, returns lineMessageId
+- POST events → 422 when club has no lineGroupId
+- POST events → 403 for non-admin
+- POST events → auto-generates title when omitted
+- POST events → event saved even when pushMessage fails
+- POST events → 401 without session
+- Flex card → contains Thai fees, spots, CTA labels, colors
+
+---
+
+## Known Issues
+
+| Issue | Impact | Mitigation |
+|-------|--------|------------|
+| Bun module mock leaks between test files | events.test.ts fails when run alongside text-message.test.ts | Run each test file independently; CI should use `--bail` per file |
 
 ---
 
 ## Manual-Only Verifications
 
-| Behavior | Requirement | Why Manual | Test Instructions |
-|----------|-------------|------------|-------------------|
-| Flex Message renders correctly in LINE app | BOT-03 | LINE Flex Message rendering requires real LINE client | Send test event, verify card appearance in LINE group |
-| LIFF admin form pre-fills club defaults | EVNT-02 | LIFF webview requires LINE app context | Open LIFF URL in LINE, verify form defaults |
+| Behavior | Requirement | Why Manual | Status |
+|----------|-------------|------------|--------|
+| Flex Message renders correctly in LINE app | BOT-01 | LINE Flex Message rendering requires real LINE client | ✅ UAT passed |
+| LIFF admin form pre-fills club defaults | EVNT-02 | LIFF webview requires LINE app context | ✅ UAT passed |
+| Thai command aliases work in real LINE group | BOT-03 | Requires real LINE bot webhook | ✅ UAT passed |
 
 ---
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 5s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 5s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** verified 2026-04-08
+
+## Validation Audit 2026-04-08
+| Metric | Count |
+|--------|-------|
+| Gaps found | 2 (missing exports in mock, missing default export) |
+| Resolved | 2 |
+| Escalated | 0 |
