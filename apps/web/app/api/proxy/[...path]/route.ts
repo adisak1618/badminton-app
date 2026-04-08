@@ -8,6 +8,7 @@ async function proxyRequest(
 ) {
   const { path } = await params;
   const apiPath = `/api/${path.join("/")}`;
+  const queryString = request.nextUrl.search;
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get("badminton-session");
 
@@ -23,7 +24,7 @@ async function proxyRequest(
       ? await request.text()
       : undefined;
 
-  const res = await fetch(`${env.API_BASE_URL}${apiPath}`, {
+  const res = await fetch(`${env.API_BASE_URL}${apiPath}${queryString}`, {
     method: request.method,
     headers,
     body,
