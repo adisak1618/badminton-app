@@ -25,4 +25,5 @@ const app = new Elysia()
   )
   .listen(process.env.PORT ?? 3000);
 
+export default app;
 export type App = typeof app;

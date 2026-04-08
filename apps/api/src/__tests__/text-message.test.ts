@@ -50,10 +50,19 @@ mock.module("@repo/db", () => {
   return {
     db: {
       select: mockSelect,
+      insert: () => ({ values: () => ({ returning: () => Promise.resolve([]) }) }),
+      update: () => ({ set: () => ({ where: () => Promise.resolve() }) }),
+      delete: () => ({ where: () => Promise.resolve() }),
     },
     clubs: {},
     clubMembers: {},
     members: {},
+    events: {},
+    registrations: {},
+    idempotencyKeys: {},
+    eventStatusEnum: {},
+    skillLevelEnum: {},
+    clubRoleEnum: {},
     eq: () => {},
     and: () => {},
   };
