@@ -18,6 +18,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 4: Event Creation** - Admin creates one-time events via bot command and LIFF, bot posts Flex Message card to group
 - [ ] **Phase 5: Registration Loop** - Member registers via LIFF, live count, cancellation, admin remove, full/closed state
 - [ ] **Phase 6: Recurring Events** - Recurring event templates, auto-generate occurrences, configurable open window, per-occurrence overrides
+- [ ] **Phase 7: Club Setup UI Gaps** - Add homeCourtLocation to club forms and unlink group button to settings
+- [ ] **Phase 8: Data Validation Fixes** - Align venueName maxLength between API and DB, use validated env for LIFF_ID
 
 ## Phase Details
 
@@ -110,6 +112,27 @@ Plans:
   5. All occurrence scheduling uses Asia/Bangkok timezone — events open and post at the correct local time regardless of server timezone
 **Plans**: TBD
 
+### Phase 7: Club Setup UI Gaps
+**Goal**: Close audit gaps for CLUB-01 and CLUB-02 — homeCourtLocation field appears in all club UI forms and owners can unlink a Line group
+**Depends on**: Phase 2
+**Requirements**: CLUB-01, CLUB-02
+**Gap Closure:** Closes gaps from v1.0 milestone audit
+**Success Criteria** (what must be TRUE):
+  1. The ClubForm component includes a homeCourtLocation text field — creating or editing a club submits this value to the API
+  2. The club detail/settings page displays the homeCourtLocation value
+  3. The club settings page has an "Unlink Group" button that calls DELETE /api/clubs/:id/link — after clicking, the club's line_group_id is cleared
+**Plans**: TBD
+
+### Phase 8: Data Validation Fixes
+**Goal**: Fix API-DB validation mismatch for venueName and use validated env module for LIFF_ID
+**Depends on**: Phase 4
+**Requirements**: EVNT-01, BOT-01
+**Gap Closure:** Closes integration issues from v1.0 milestone audit
+**Success Criteria** (what must be TRUE):
+  1. The venueName field has consistent max length between API validation and DB column — no valid API input can cause a DB truncation or error
+  2. LIFF layout reads LIFF_ID from the validated env module, not raw process.env
+**Plans**: TBD
+
 ## Progress
 
 **Execution Order:**
@@ -123,3 +146,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 4. Event Creation | 0/3 | Planning complete | - |
 | 5. Registration Loop | 0/TBD | Not started | - |
 | 6. Recurring Events | 0/TBD | Not started | - |
+| 7. Club Setup UI Gaps | 0/TBD | Not started | - |
+| 8. Data Validation Fixes | 0/TBD | Not started | - |

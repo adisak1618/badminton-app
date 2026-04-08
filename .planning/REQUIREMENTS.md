@@ -17,7 +17,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Club Setup
 
 - [ ] **CLUB-01**: Club owner creates a club on the website with name, home court/location, default shuttlecock fee, default court fee, default max players
-- [ ] **CLUB-02**: Owner adds Line bot to their club's Line group; bot detects `join` event and links group to club
+- [ ] **CLUB-02**: Owner adds Line bot to their club's Line group; bot detects `join` event and links group to club; owner can unlink a group via settings
 - [ ] **CLUB-03**: Owner role has full control — can manage club settings and promote/demote admins
 - [ ] **CLUB-04**: Admin role can create events, manage registrations, and remove members
 - [ ] **CLUB-05**: Per-club default settings pre-fill event creation fields
@@ -101,8 +101,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-02 | Phase 1 | Complete |
 | INFRA-03 | Phase 1 | Complete |
 | INFRA-04 | Phase 1 | Complete |
-| CLUB-01 | Phase 2 | Pending |
-| CLUB-02 | Phase 2 | Pending |
+| CLUB-01 | Phase 7 | Pending |
+| CLUB-02 | Phase 7 | Pending |
 | CLUB-03 | Phase 2 | Pending |
 | CLUB-04 | Phase 2 | Pending |
 | CLUB-05 | Phase 2 | Pending |
