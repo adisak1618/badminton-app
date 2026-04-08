@@ -97,7 +97,10 @@ Plans:
   5. An admin can remove any member from the registration list via the LIFF admin panel
   6. An admin can close registration early via bot command — subsequent registration attempts are rejected
   7. When registration count changes (member added, member removed, event closed), the bot reposts a new Flex Message card with the updated count, replacing the previous card as the current reference
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 05-01-PLAN.md — Registration API routes, flex card repost builder, event status endpoint, integration tests
+- [ ] 05-02-PLAN.md — LIFF registration page with register/cancel/admin controls and human verification
 **UI hint**: yes
 
 ### Phase 6: Recurring Events
