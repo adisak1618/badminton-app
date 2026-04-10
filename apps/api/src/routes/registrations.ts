@@ -100,7 +100,7 @@ export const registrationRoutes = new Elysia({ prefix: "/registrations" })
         .from(registrations)
         .where(eq(registrations.eventId, body.eventId));
 
-      if (currentCount >= event.maxPlayers) {
+      if (Number(currentCount) >= event.maxPlayers) {
         throw new ApiError(409, "EVENT_FULL", "งานนี้เต็มแล้ว");
       }
 
@@ -113,7 +113,9 @@ export const registrationRoutes = new Elysia({ prefix: "/registrations" })
           .returning();
         regId = reg.id;
       } catch (err: any) {
-        if (err?.code === "23505") {
+        // DrizzleQueryError wraps the Neon DB error — check cause.code for PG error codes
+        const pgCode = err?.cause?.code ?? err?.code;
+        if (pgCode === "23505") {
           throw new ApiError(409, "ALREADY_REGISTERED", "ลงทะเบียนแล้ว");
         }
         throw err;
