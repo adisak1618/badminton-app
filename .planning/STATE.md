@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Phase 5 UI-SPEC approved
-last_updated: "2026-04-08T07:13:00.839Z"
-last_activity: 2026-04-08 -- Phase 5 planning complete
+last_updated: "2026-04-10T17:11:38.238Z"
+last_activity: 2026-04-10 -- Phase 05 execution started
 progress:
   total_phases: 8
   completed_phases: 4
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-05)
 
 **Core value:** Members can register for badminton sessions directly inside their Line group — no more copy-paste templates, no manual headcount tracking.
-**Current focus:** Phase 02 — club-setup
+**Current focus:** Phase 05 — registration-loop
 
 ## Current Position
 
-Phase: 02 (club-setup) — EXECUTING
-Plan: 1 of 4
-Status: Ready to execute
-Last activity: 2026-04-08 -- Phase 5 planning complete
+Phase: 05 (registration-loop) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 05
+Last activity: 2026-04-10 -- Phase 05 execution started
 
 Progress: [████░░░░░░] 43%
 
