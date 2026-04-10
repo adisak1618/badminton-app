@@ -1,6 +1,7 @@
 import { Elysia, t } from "elysia";
-import { db, events, clubs, members } from "@repo/db";
-import { eq } from "drizzle-orm";
+import { db, events, clubs, members, registrations } from "@repo/db";
+import { eq, count } from "drizzle-orm";
+import { repostFlexCard } from "../lib/repost-card";
 import { authMiddleware } from "../middleware/auth";
 import { requireClubRole } from "../lib/require-club-role";
 import { notFound, unprocessableEntity } from "../lib/errors";
@@ -149,6 +150,56 @@ export const eventRoutes = new Elysia({ prefix: "/events" })
         shuttlecockFee: t.Integer({ minimum: 0 }),
         courtFee: t.Integer({ minimum: 0 }),
         maxPlayers: t.Integer({ minimum: 1 }),
+      }),
+    }
+  )
+  // PATCH /events/:id/status — close or reopen event (REG-04, D-11, D-13)
+  .patch(
+    "/:id/status",
+    async ({ params, body, session }) => {
+      const [member] = await db
+        .select()
+        .from(members)
+        .where(eq(members.lineUserId, session.lineUserId!));
+      if (!member) throw notFound("Member");
+
+      const [event] = await db
+        .select()
+        .from(events)
+        .where(eq(events.id, params.id));
+      if (!event) throw notFound("Event");
+
+      await requireClubRole(event.clubId, member.id, ["owner", "admin"]);
+
+      await db
+        .update(events)
+        .set({ status: body.status })
+        .where(eq(events.id, params.id));
+
+      // Re-fetch updated event for repost
+      const [updatedEvent] = await db
+        .select()
+        .from(events)
+        .where(eq(events.id, params.id));
+
+      const [{ value: registeredCount }] = await db
+        .select({ value: count() })
+        .from(registrations)
+        .where(eq(registrations.eventId, params.id));
+
+      await repostFlexCard({
+        event: updatedEvent,
+        clubId: event.clubId,
+        action: body.status === "closed" ? "close" : "reopen",
+        registeredCount: Number(registeredCount),
+      });
+
+      return { status: body.status, registeredCount: Number(registeredCount) };
+    },
+    {
+      params: t.Object({ id: t.String({ format: "uuid" }) }),
+      body: t.Object({
+        status: t.Union([t.Literal("open"), t.Literal("closed")]),
       }),
     }
   );
