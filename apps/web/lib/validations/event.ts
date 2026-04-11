@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const eventCreateSchema = z.object({
   title: z.string().max(255).optional(),
-  eventDate: z.string().min(1, "กรุณากรอกวันที่และเวลา"),
+  eventDate: z.string().optional().default(""),
   venueName: z.string().min(1, "กรุณากรอกชื่อสนาม").max(500),
   venueMapsUrl: z
     .string()

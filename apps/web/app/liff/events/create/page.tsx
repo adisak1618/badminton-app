@@ -171,7 +171,11 @@ function LiffEventCreateForm() {
       return;
     }
 
-    // One-time event path (unchanged)
+    // One-time event path
+    if (!data.eventDate) {
+      form.setError("eventDate", { message: "กรุณากรอกวันที่และเวลา" });
+      return;
+    }
     const eventDateWithTz = data.eventDate + ":00+07:00";
 
     const parsed = new Date(eventDateWithTz);
