@@ -116,7 +116,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EVNT-04 | Phase 6 | Pending |
 | EVNT-05 | Phase 6 | Pending |
 | EVNT-06 | Phase 6 | Pending |
-| BOT-01 | Phase 4 | Pending |
+| BOT-01 | Phase 4 + Phase 9 | Pending |
 | BOT-02 | Phase 5 | Pending |
 | BOT-03 | Phase 4 | Pending |
 | BOT-04 | Phase 5 | Pending |

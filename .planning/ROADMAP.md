@@ -20,6 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 6: Recurring Events** - Recurring event templates, auto-generate occurrences, configurable open window, per-occurrence overrides
 - [ ] **Phase 7: Club Setup UI Gaps** - Add homeCourtLocation to club forms and unlink group button to settings
 - [ ] **Phase 8: Data Validation Fixes** - Align venueName maxLength between API and DB, use validated env for LIFF_ID
+- [ ] **Phase 9: Event Details Page** - LIFF event details page so Flex Message "Details" CTA resolves instead of 404
 
 ## Phase Details
 
@@ -139,6 +140,18 @@ Plans:
   2. LIFF layout reads LIFF_ID from the validated env module, not raw process.env
 **Plans**: TBD
 
+### Phase 9: Event Details Page
+**Goal**: The Flex Message "Details" CTA button opens a LIFF page showing full event information and registration list — closing the broken flow identified in the milestone audit
+**Depends on**: Phase 5
+**Requirements**: BOT-01
+**Gap Closure:** Closes integration gap (Flex Message Details CTA → 404) and broken "Details view" E2E flow from v1.0 milestone audit
+**Success Criteria** (what must be TRUE):
+  1. A Next.js page exists at `/liff/events/[id]` that loads event data by ID and displays venue, date/time, fees, and max players
+  2. The page displays the current registration list with member display names
+  3. Tapping "Details" (รายละเอียด) on the Flex Message card in Line opens this page in the LIFF browser without error
+**Plans**: TBD
+**UI hint**: yes
+
 ## Progress
 
 **Execution Order:**
@@ -154,3 +167,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 6. Recurring Events | 0/TBD | Not started | - |
 | 7. Club Setup UI Gaps | 0/TBD | Not started | - |
 | 8. Data Validation Fixes | 0/TBD | Not started | - |
+| 9. Event Details Page | 0/TBD | Not started | - |
