@@ -9,6 +9,7 @@ import { clubLinkRoutes } from "./routes/club-link";
 import { liffProfileRoutes } from "./routes/liff-profile";
 import { eventRoutes } from "./routes/events";
 import { registrationRoutes } from "./routes/registrations";
+import { eventTemplateRoutes } from "./routes/event-templates";
 
 const app = new Elysia()
   .use(openapi())
@@ -23,6 +24,7 @@ const app = new Elysia()
       .use(clubLinkRoutes)
       .use(liffProfileRoutes)
       .use(eventRoutes)
+      .use(eventTemplateRoutes)
       .use(registrationRoutes)
   )
   .listen(process.env.PORT ?? 3000);
