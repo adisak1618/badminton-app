@@ -52,15 +52,17 @@ Source: Standard 8-point scale; pb-2 pattern confirmed in RESEARCH.md code examp
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
 | Body | 16px | 400 (regular) | 1.5 |
-| Label | 14px | 500 (medium) | 1.4 |
-| Heading | 20px | 600 (semibold) | 1.2 |
-| Display | 28px | 700 (bold) | 1.2 |
+| Label | 14px | 400 (regular) | 1.4 |
+| Heading | 20px | 700 (bold) | 1.2 |
+| Display | 24px | 700 (bold) | 1.2 |
 
 Notes:
-- Card stat values (Max Players, Shuttlecock Fee, Court Fee, Home Court) render at 24px / 700 bold — matches existing `text-2xl font-bold` pattern in RESEARCH.md code examples.
-- Card label row (e.g. "Home Court") renders at 14px / 500 medium using `text-sm font-medium text-muted-foreground`.
+- Card stat values (Max Players, Shuttlecock Fee, Court Fee, Home Court) render at 24px / 700 bold — this IS the Display role (`text-2xl font-bold` pattern in RESEARCH.md).
+- Card label row (e.g. "Home Court") renders at 14px / 400 regular using `text-sm text-muted-foreground`.
+- 28px was dropped; 24px is promoted to Display to eliminate the fifth size.
+- 500 (medium) and 600 (semibold) weights are removed; only 400 and 700 are used.
 
-Source: Derived from existing card pattern in `apps/web/app/clubs/[id]/page.tsx` (RESEARCH.md).
+Source: Derived from existing card pattern in `apps/web/app/clubs/[id]/page.tsx` (RESEARCH.md). Weights collapsed per checker requirement (max 2).
 
 ---
 
@@ -75,7 +77,7 @@ Source: Derived from existing card pattern in `apps/web/app/clubs/[id]/page.tsx`
 
 Accent reserved for:
 - "Unlink Group" trigger button (variant destructive)
-- Confirmation dialog "Confirm Unlink" button (variant destructive)
+- Confirmation dialog "Unlink Group" button (variant destructive)
 
 Source: `packages/ui/src/styles/globals.css` (verified codebase). Destructive token is the only semantic color needed — no other destructive actions in this phase.
 
@@ -89,8 +91,8 @@ Source: `packages/ui/src/styles/globals.css` (verified codebase). Destructive to
 | Unlink trigger button | "Unlink Group" |
 | Dialog title | "Unlink LINE Group?" |
 | Dialog description | "Bot notifications will stop for this club. Members will no longer receive event updates in the LINE group. This cannot be undone from here — you will need to add the bot again to relink." |
-| Dialog cancel button | "Cancel" |
-| Dialog confirm button | "Unlink" |
+| Dialog cancel button | "Keep Group" |
+| Dialog confirm button | "Unlink Group" |
 | Success toast | "LINE Group unlinked" |
 | Error toast | "Failed to unlink group. Please try again." |
 | Location card label | "Home Court" |
@@ -100,6 +102,7 @@ Source: `packages/ui/src/styles/globals.css` (verified codebase). Destructive to
 Source:
 - Warning copy: Claude's discretion (CONTEXT.md D-03 and "Claude's Discretion" section)
 - "Not set" choice: Claude's discretion (CONTEXT.md D-05)
+- "Keep Group" and "Unlink Group" dialog buttons: revised per checker — avoid generic "Cancel", confirm button gets a noun for clarity
 - All other labels: derived from existing patterns in codebase (RESEARCH.md)
 
 ---
@@ -130,14 +133,15 @@ Source: All verified in codebase (RESEARCH.md Standard Stack section).
 3. Grid renders 4 cards: Max Players, Shuttlecock Fee, Court Fee, Home Court.
 4. Grid class: `md:grid-cols-2 lg:grid-cols-4` (Claude's discretion — wraps gracefully on small screens per RESEARCH.md open question resolution).
 5. If `homeCourtLocation` is null or empty string, card renders with value "Not set" in `text-muted-foreground` style.
-6. If `homeCourtLocation` has a value, card renders the text as-is at `text-2xl font-bold`.
+6. If `homeCourtLocation` has a value, card renders the text as-is at `text-2xl font-bold` (Display role).
+7. Focal point: the 4-card stat grid is the primary visual anchor on the club detail page. Home Court card is the new addition and should occupy the rightmost position at lg breakpoint.
 
 ### Flow 2: Unlink Group (Club Settings Page)
 
 States:
 - **Initial:** Settings page shows club info form. If `club.lineGroupId` is not null, an "Unlink Group" section appears below the form.
-- **Dialog open:** User clicks "Unlink Group" button (variant="destructive"). Confirmation dialog opens.
-- **Loading:** User clicks "Unlink" confirm. Button shows disabled state with loading indicator. `unlinking` state is true.
+- **Dialog open:** User clicks "Unlink Group" button (variant="destructive"). Confirmation dialog opens. Focal point: dialog title "Unlink LINE Group?" with destructive confirm button "Unlink Group".
+- **Loading:** User clicks "Unlink Group" confirm. Button shows disabled state with loading indicator. `unlinking` state is true.
 - **Success:** DELETE resolves OK. Dialog closes. `toast.success("LINE Group unlinked")` fires. Club state is re-fetched and badge updates to "Not Linked".
 - **Error:** DELETE fails. Dialog closes. `toast.error("Failed to unlink group. Please try again.")` fires. Club state unchanged.
 
