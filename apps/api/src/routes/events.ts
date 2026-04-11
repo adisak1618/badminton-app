@@ -145,7 +145,7 @@ export const eventRoutes = new Elysia({ prefix: "/events" })
         clubId: t.String({ format: "uuid" }),
         title: t.Optional(t.String({ maxLength: 255 })),
         eventDate: t.String(), // ISO 8601 with timezone offset
-        venueName: t.String({ minLength: 1, maxLength: 500 }),
+        venueName: t.String({ minLength: 1, maxLength: 255 }),
         venueMapsUrl: t.Optional(t.String({ maxLength: 500 })),
         shuttlecockFee: t.Integer({ minimum: 0 }),
         courtFee: t.Integer({ minimum: 0 }),

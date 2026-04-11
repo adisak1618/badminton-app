@@ -66,9 +66,7 @@ Plans:
   2. A first-time member is redirected to a profile setup screen and cannot proceed until they enter display name, skill level, and years playing — the record is saved to the global `members` table
   3. The same member profile (name, skill level) appears regardless of which club's LIFF they access — profile is keyed by Line userId, not by club
   4. A member can update their display name, skill level, and years playing at any time via the LIFF profile page — changes persist immediately
-**Plans:** 1 plan
-Plans:
-- [ ] 08-01-PLAN.md — Fix venueName maxLength and LIFF_ID env access
+**Plans**: TBD
 **UI hint**: yes
 
 ### Phase 4: Event Creation
@@ -115,9 +113,7 @@ Plans:
   3. An admin can override an individual occurrence to change the venue, adjust fees, or cancel it — the change applies only to that occurrence, not the template
   4. A cancelled occurrence posts a cancellation notice to the group; the registration form for that occurrence shows as unavailable
   5. All occurrence scheduling uses Asia/Bangkok timezone — events open and post at the correct local time regardless of server timezone
-**Plans:** 1 plan
-Plans:
-- [ ] 08-01-PLAN.md — Fix venueName maxLength and LIFF_ID env access
+**Plans**: TBD
 
 ### Phase 7: Club Setup UI Gaps
 **Goal**: Close audit gaps for CLUB-01 and CLUB-02 — homeCourtLocation field appears in all club UI forms and owners can unlink a Line group
@@ -130,8 +126,8 @@ Plans:
   3. The club settings page has an "Unlink Group" button that calls DELETE /api/clubs/:id/link — after clicking, the club's line_group_id is cleared
 **Plans:** 2 plans
 Plans:
-- [x] 07-01-PLAN.md — Add homeCourtLocation card to detail page and fix settings type
-- [x] 07-02-PLAN.md — Add Unlink Group button with dialog to settings page and Toaster to layout
+- [ ] 07-01-PLAN.md — Add homeCourtLocation card to detail page and fix settings type
+- [ ] 07-02-PLAN.md — Add Unlink Group button with dialog to settings page and Toaster to layout
 
 ### Phase 8: Data Validation Fixes
 **Goal**: Fix API-DB validation mismatch for venueName and use validated env module for LIFF_ID
@@ -141,9 +137,7 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. The venueName field has consistent max length between API validation and DB column — no valid API input can cause a DB truncation or error
   2. LIFF layout reads LIFF_ID from the validated env module, not raw process.env
-**Plans:** 1 plan
-Plans:
-- [ ] 08-01-PLAN.md — Fix venueName maxLength and LIFF_ID env access
+**Plans**: TBD
 
 ## Progress
 
