@@ -52,6 +52,16 @@ export async function POST(request: NextRequest) {
 
   if (existingMember) {
     session.memberId = existingMember.id;
+  } else {
+    // Auto-create member record so any LIFF page works without requiring setup first
+    const [newMember] = await db
+      .insert(members)
+      .values({
+        lineUserId: profile.sub,
+        displayName: profile.name ?? "LINE User",
+      })
+      .returning();
+    session.memberId = newMember.id;
   }
 
   await session.save();
