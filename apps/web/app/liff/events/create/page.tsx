@@ -6,11 +6,24 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useLiff } from "@/components/liff/liff-provider";
-import { eventCreateSchema, type EventCreateFormData } from "@/lib/validations/event";
+import {
+  eventCreateSchema,
+  type EventCreateFormData,
+  templateCreateSchema,
+  type TemplateCreateFormData,
+} from "@/lib/validations/event";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { Card, CardContent } from "@repo/ui/components/card";
+import { Switch } from "@repo/ui/components/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
 import { Loader2 } from "lucide-react";
 
 interface ClubDefaults {
@@ -19,6 +32,16 @@ interface ClubDefaults {
   defaultCourtFee: number;
   defaultMaxPlayers: number;
 }
+
+const dayOfWeekOptions = [
+  { value: 1, label: "วันจันทร์" },
+  { value: 2, label: "วันอังคาร" },
+  { value: 3, label: "วันพุธ" },
+  { value: 4, label: "วันพฤหัสบดี" },
+  { value: 5, label: "วันศุกร์" },
+  { value: 6, label: "วันเสาร์" },
+  { value: 0, label: "วันอาทิตย์" },
+];
 
 export default function LiffEventCreatePage() {
   return (
@@ -41,6 +64,13 @@ function LiffEventCreateForm() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isRecurring, setIsRecurring] = useState(false);
+
+  // Recurring template form state (uncontrolled via useState for Select fields)
+  const [eventDayOfWeek, setEventDayOfWeek] = useState<number>(1);
+  const [eventTime, setEventTime] = useState("");
+  const [openDayOfWeek, setOpenDayOfWeek] = useState<number>(1);
+  const [openTime, setOpenTime] = useState("");
 
   const form = useForm<EventCreateFormData>({
     resolver: zodResolver(eventCreateSchema),
@@ -98,10 +128,52 @@ function LiffEventCreateForm() {
   }, [isReady, isLoggedIn, clubId, form]);
 
   async function onSubmit(data: EventCreateFormData) {
-    // Append Thai timezone offset to datetime-local value (Pitfall 5)
+    if (isRecurring) {
+      // Validate recurring fields
+      const templateData: TemplateCreateFormData = {
+        title: data.title,
+        venueName: data.venueName,
+        venueMapsUrl: data.venueMapsUrl,
+        shuttlecockFee: data.shuttlecockFee,
+        courtFee: data.courtFee,
+        maxPlayers: data.maxPlayers,
+        eventDayOfWeek,
+        eventTime,
+        openDayOfWeek,
+        openTime,
+      };
+
+      const parsed = templateCreateSchema.safeParse(templateData);
+      if (!parsed.success) {
+        toast.error("กรุณากรอกข้อมูล recurring ให้ครบถ้วน");
+        return;
+      }
+
+      const res = await fetch("/api/proxy/event-templates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clubId, ...parsed.data }),
+      });
+
+      if (res.status === 403) {
+        toast.error("คุณไม่มีสิทธิ์จัดการ recurring กรุณาติดต่อผู้ดูแลสโมสร");
+        return;
+      }
+      if (!res.ok) {
+        toast.error("บันทึกไม่สำเร็จ กรุณาลองใหม่");
+        return;
+      }
+
+      toast.success("สร้าง recurring สำเร็จ");
+      setTimeout(() => {
+        liff?.closeWindow();
+      }, 1000);
+      return;
+    }
+
+    // One-time event path (unchanged)
     const eventDateWithTz = data.eventDate + ":00+07:00";
 
-    // Validate date is in the future
     const parsed = new Date(eventDateWithTz);
     if (parsed <= new Date()) {
       form.setError("eventDate", { message: "กรุณาเลือกวันที่ในอนาคต" });
@@ -110,7 +182,7 @@ function LiffEventCreateForm() {
 
     const body = {
       clubId,
-      title: data.title || undefined, // omit empty string so API auto-generates
+      title: data.title || undefined,
       eventDate: eventDateWithTz,
       venueName: data.venueName,
       venueMapsUrl: data.venueMapsUrl || undefined,
@@ -135,7 +207,6 @@ function LiffEventCreateForm() {
     }
 
     toast.success("สร้างอีเวนท์สำเร็จ");
-    // Close LIFF window after short delay for toast visibility
     setTimeout(() => {
       liff?.closeWindow();
     }, 1000);
@@ -180,22 +251,104 @@ function LiffEventCreateForm() {
               )}
             </div>
 
-            {/* Date/time - required (D-08) */}
-            <div className="space-y-2">
-              <Label htmlFor="eventDate">วันที่และเวลา</Label>
-              <input
-                id="eventDate"
-                type="datetime-local"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                {...form.register("eventDate")}
-                aria-describedby={form.formState.errors.eventDate ? "eventDate-error" : undefined}
-              />
-              {form.formState.errors.eventDate && (
-                <p id="eventDate-error" className="text-sm text-destructive" role="alert">
-                  {form.formState.errors.eventDate.message}
+            {/* Recurring toggle (D-05) */}
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="recurring-toggle" className="text-sm font-medium">
+                  สร้างซ้ำทุกสัปดาห์
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  ระบบจะสร้างอีเวนท์ทุกสัปดาห์โดยอัตโนมัติ
                 </p>
-              )}
+              </div>
+              <Switch
+                id="recurring-toggle"
+                checked={isRecurring}
+                onCheckedChange={setIsRecurring}
+              />
             </div>
+
+            {/* Date/time - shown only when NOT recurring (D-08) */}
+            {!isRecurring && (
+              <div className="space-y-2">
+                <Label htmlFor="eventDate">วันที่และเวลา</Label>
+                <input
+                  id="eventDate"
+                  type="datetime-local"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  {...form.register("eventDate")}
+                  aria-describedby={form.formState.errors.eventDate ? "eventDate-error" : undefined}
+                />
+                {form.formState.errors.eventDate && (
+                  <p id="eventDate-error" className="text-sm text-destructive" role="alert">
+                    {form.formState.errors.eventDate.message}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Recurring schedule fields - shown only when recurring is ON */}
+            {isRecurring && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="eventDayOfWeek">วันที่จัดอีเวนท์</Label>
+                  <Select
+                    value={String(eventDayOfWeek)}
+                    onValueChange={(val) => setEventDayOfWeek(Number(val))}
+                  >
+                    <SelectTrigger id="eventDayOfWeek">
+                      <SelectValue placeholder="เลือกวัน" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {dayOfWeekOptions.map((opt) => (
+                        <SelectItem key={opt.value} value={String(opt.value)}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="eventTime">เวลาเริ่ม</Label>
+                  <Input
+                    id="eventTime"
+                    type="time"
+                    value={eventTime}
+                    onChange={(e) => setEventTime(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="openDayOfWeek">วันที่เปิดรับสมัคร</Label>
+                  <Select
+                    value={String(openDayOfWeek)}
+                    onValueChange={(val) => setOpenDayOfWeek(Number(val))}
+                  >
+                    <SelectTrigger id="openDayOfWeek">
+                      <SelectValue placeholder="เลือกวัน" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {dayOfWeekOptions.map((opt) => (
+                        <SelectItem key={opt.value} value={String(opt.value)}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="openTime">เวลาเปิดรับสมัคร</Label>
+                  <Input
+                    id="openTime"
+                    type="time"
+                    value={openTime}
+                    onChange={(e) => setOpenTime(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
 
             {/* Venue name - required (D-08) */}
             <div className="space-y-2">
@@ -294,6 +447,8 @@ function LiffEventCreateForm() {
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   กำลังสร้าง...
                 </>
+              ) : isRecurring ? (
+                "บันทึก"
               ) : (
                 "สร้างอีเวนท์"
               )}
