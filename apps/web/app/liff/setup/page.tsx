@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useLiff } from "@/components/liff/liff-provider";
@@ -8,6 +8,20 @@ import { ProfileForm } from "@/components/liff/profile-form";
 import { Loader2 } from "lucide-react";
 
 export default function LiffSetupPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" aria-label="Loading" />
+        </div>
+      }
+    >
+      <LiffSetupInner />
+    </Suspense>
+  );
+}
+
+function LiffSetupInner() {
   const { isReady, liff } = useLiff();
   const router = useRouter();
   const searchParams = useSearchParams();
