@@ -15,10 +15,13 @@ export const eventRoutes = new Elysia({ prefix: "/events" })
   .get(
     "/club-defaults",
     async ({ query, session }) => {
+      if (!session.lineUserId) {
+        throw new Error("Session missing lineUserId");
+      }
       const [member] = await db
         .select()
         .from(members)
-        .where(eq(members.lineUserId, session.lineUserId!));
+        .where(eq(members.lineUserId, session.lineUserId));
       if (!member) throw notFound("Member");
       await requireClubRole(query.clubId, member.id, ["owner", "admin"]);
 
@@ -40,10 +43,13 @@ export const eventRoutes = new Elysia({ prefix: "/events" })
   .post(
     "/",
     async ({ body, session, set }) => {
+      if (!session.lineUserId) {
+        throw new Error("Session missing lineUserId");
+      }
       const [member] = await db
         .select()
         .from(members)
-        .where(eq(members.lineUserId, session.lineUserId!));
+        .where(eq(members.lineUserId, session.lineUserId));
       if (!member) throw notFound("Member");
       await requireClubRole(body.clubId, member.id, ["owner", "admin"]);
 
@@ -61,6 +67,9 @@ export const eventRoutes = new Elysia({ prefix: "/events" })
 
       // Parse event date
       const eventDate = new Date(body.eventDate);
+      if (isNaN(eventDate.getTime())) {
+        throw unprocessableEntity("Invalid eventDate");
+      }
 
       // Auto-generate title if not provided (D-07)
       const title =
@@ -144,9 +153,9 @@ export const eventRoutes = new Elysia({ prefix: "/events" })
       body: t.Object({
         clubId: t.String({ format: "uuid" }),
         title: t.Optional(t.String({ maxLength: 255 })),
-        eventDate: t.String(), // ISO 8601 with timezone offset
+        eventDate: t.String({ format: "date-time" }), // ISO 8601 with timezone offset
         venueName: t.String({ minLength: 1, maxLength: 255 }),
-        venueMapsUrl: t.Optional(t.String({ maxLength: 500 })),
+        venueMapsUrl: t.Optional(t.String({ format: "uri", maxLength: 500 })),
         shuttlecockFee: t.Integer({ minimum: 0 }),
         courtFee: t.Integer({ minimum: 0 }),
         maxPlayers: t.Integer({ minimum: 1 }),
@@ -157,10 +166,13 @@ export const eventRoutes = new Elysia({ prefix: "/events" })
   .patch(
     "/:id/status",
     async ({ params, body, session }) => {
+      if (!session.lineUserId) {
+        throw new Error("Session missing lineUserId");
+      }
       const [member] = await db
         .select()
         .from(members)
-        .where(eq(members.lineUserId, session.lineUserId!));
+        .where(eq(members.lineUserId, session.lineUserId));
       if (!member) throw notFound("Member");
 
       const [event] = await db
