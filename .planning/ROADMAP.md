@@ -156,9 +156,11 @@ Plans:
   1. A Next.js page exists at `/liff/events/[id]` that loads event data by ID and displays venue, date/time, fees, and max players
   2. The page displays the current registration list with member display names
   3. Tapping "Details" (รายละเอียด) on the Flex Message card in Line opens this page in the LIFF browser without error
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 09-01-PLAN.md — Move register page to /liff/events/[id], add 301 redirect, add cancelled state
+- [ ] 09-02-PLAN.md — Single CTA button on Flex cards, notification line in repost cards, update URLs
 **UI hint**: yes
-
 ### Phase 10: Hybrid LIFF & Free Messaging
 **Goal**: Refactor LIFF pages to work both inside LINE and in regular browsers, switch user-initiated actions from paid Messaging API pushMessage to free LIFF sendMessages/shareTargetPicker, and restructure URLs (remove /liff prefix)
 **Depends on**: Phase 9
