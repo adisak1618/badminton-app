@@ -12,6 +12,7 @@ interface RepostCardData {
   registerLiffUrl: string;
   detailsLiffUrl: string;
   notificationAltText: string;
+  notificationBodyText: string;
   isFull: boolean;
   isClosed: boolean;
 }
@@ -90,7 +91,7 @@ export function buildEventFlexCard(data: EventCardData): messagingApi.FlexMessag
       },
       footer: {
         type: "box",
-        layout: "horizontal",
+        layout: "vertical",
         contents: [
           {
             type: "button",
@@ -100,15 +101,6 @@ export function buildEventFlexCard(data: EventCardData): messagingApi.FlexMessag
               type: "uri",
               label: "ลงทะเบียน",
               uri: data.registerLiffUrl,
-            },
-          },
-          {
-            type: "button",
-            style: "secondary",
-            action: {
-              type: "uri",
-              label: "รายละเอียด",
-              uri: data.detailsLiffUrl,
             },
           },
         ],
@@ -182,8 +174,8 @@ export function buildRepostFlexCard(data: RepostCardData): messagingApi.FlexMess
     spotsColor = "#22c55e";
   }
 
-  const registerButtonStyle = data.isFull || data.isClosed ? "secondary" : "primary";
-  const registerButtonColor = data.isFull || data.isClosed ? undefined : "#00B300";
+  const isOpenWithSlots = !data.isFull && !data.isClosed;
+  const ctaLabel = isOpenWithSlots ? "ลงทะเบียน" : "รายละเอียด";
 
   const venueContent: messagingApi.FlexText = {
     type: "text",
@@ -216,28 +208,20 @@ export function buildRepostFlexCard(data: RepostCardData): messagingApi.FlexMess
           venueContent,
           { type: "text", text: feeText, size: "sm", color: "#666666" },
           { type: "text", text: spotsText, size: "sm", color: spotsColor },
+          { type: "text", text: data.notificationBodyText, size: "sm", color: "#888888", margin: "md" },
         ],
       },
       footer: {
         type: "box",
-        layout: "horizontal",
+        layout: "vertical",
         contents: [
           {
             type: "button",
-            style: registerButtonStyle,
-            ...(registerButtonColor ? { color: registerButtonColor } : {}),
+            style: isOpenWithSlots ? "primary" : "secondary",
+            ...(isOpenWithSlots ? { color: "#00B300" } : {}),
             action: {
               type: "uri",
-              label: "ลงทะเบียน",
-              uri: data.registerLiffUrl,
-            },
-          },
-          {
-            type: "button",
-            style: "secondary",
-            action: {
-              type: "uri",
-              label: "รายละเอียด",
+              label: ctaLabel,
               uri: data.detailsLiffUrl,
             },
           },
