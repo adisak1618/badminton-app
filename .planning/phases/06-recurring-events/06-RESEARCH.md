@@ -439,20 +439,23 @@ function isWindowOpenOrMissed(template: EventTemplate, nowBangkok: Date): boolea
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Is `date-fns-tz` already in the monorepo?**
    - What we know: Not seen in scanned files.
    - What's unclear: May be in another package's dependencies.
    - Recommendation: Run `bun pm ls | grep date-fns` in project root as Wave 0 step; install if missing.
+   - **RESOLVED:** Plan 01 Task 2 installs `date-fns-tz` via `cd apps/api && bun add date-fns-tz`.
 
 2. **How does "Create now" surface in the template management UI?**
    - What we know: Claude's Discretion per CONTEXT.md.
    - Recommendation: A button on the template detail/list page that calls `POST /api/event-templates/:id/create-now` — which runs the same generation logic as the cron but immediately, regardless of window timing.
+   - **RESOLVED:** Plan 04 Task 1 implements "สร้างอีเวนท์ทันที" button on template list page calling `POST /api/proxy/event-templates/:id/create-now`.
 
 3. **Weekly occurrence uniqueness constraint — DB-level or application-level?**
    - What we know: Both are viable; DB constraint is safer.
    - Recommendation: Application-level `SELECT` guard (same as existing idempotency pattern in the codebase) is sufficient and consistent with project patterns. Avoid DB partial index complexity unless duplicates become a real problem.
+   - **RESOLVED:** Plan 02 Task 1 implements application-level SELECT guard (check events by templateId + week range before INSERT).
 
 ---
 
