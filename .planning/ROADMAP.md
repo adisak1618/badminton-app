@@ -159,7 +159,7 @@ Plans:
 **Plans:** 1/2 plans executed
 Plans:
 - [x] 09-01-PLAN.md — Move register page to /liff/events/[id], add 301 redirect, add cancelled state
-- [ ] 09-02-PLAN.md — Single CTA button on Flex cards, notification line in repost cards, update URLs
+- [x] 09-02-PLAN.md — Single CTA button on Flex cards, notification line in repost cards, update URLs
 **UI hint**: yes
 ### Phase 10: Hybrid LIFF & Free Messaging
 **Goal**: Refactor LIFF pages to work both inside LINE and in regular browsers, switch user-initiated actions from paid Messaging API pushMessage to free LIFF sendMessages/shareTargetPicker, and restructure URLs (remove /liff prefix)
