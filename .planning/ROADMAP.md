@@ -156,9 +156,9 @@ Plans:
   1. A Next.js page exists at `/liff/events/[id]` that loads event data by ID and displays venue, date/time, fees, and max players
   2. The page displays the current registration list with member display names
   3. Tapping "Details" (รายละเอียด) on the Flex Message card in Line opens this page in the LIFF browser without error
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
-- [ ] 09-01-PLAN.md — Move register page to /liff/events/[id], add 301 redirect, add cancelled state
+- [x] 09-01-PLAN.md — Move register page to /liff/events/[id], add 301 redirect, add cancelled state
 - [ ] 09-02-PLAN.md — Single CTA button on Flex cards, notification line in repost cards, update URLs
 **UI hint**: yes
 ### Phase 10: Hybrid LIFF & Free Messaging
@@ -198,6 +198,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 6. Recurring Events | 4/4 | Complete | 2026-04-11 |
 | 7. Club Setup UI Gaps | 2/2 | Complete | 2026-04-09 |
 | 8. Data Validation Fixes | 1/1 | Complete | 2026-04-09 |
-| 9. Event Details Page | 0/TBD | Not started | - |
+| 9. Event Details Page | 1/2 | In Progress|  |
 | 10. Hybrid LIFF & Free Messaging | 0/TBD | Not started | - |
 | 11. Club Hub & Events List | 0/TBD | Not started | - |

@@ -40,7 +40,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Bot Interaction
 
-- [ ] **BOT-01**: Bot posts a Flex Message card in the Line group with event info, current/max count, "Register" CTA, "Details" CTA
+- [x] **BOT-01**: Bot posts a Flex Message card in the Line group with event info, current/max count, "Register" CTA, "Details" CTA
 - [ ] **BOT-02**: Bot updates the Flex Message count when registrations change (repost strategy since Line messages are immutable)
 - [ ] **BOT-03**: Bot responds to text commands (e.g. /create, /close, สร้างอีเวนต์)
 - [ ] **BOT-04**: Card shows "Full" state with disabled register button when event reaches max players
@@ -116,7 +116,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EVNT-04 | Phase 6 | Pending |
 | EVNT-05 | Phase 6 | Pending |
 | EVNT-06 | Phase 6 | Pending |
-| BOT-01 | Phase 4 + Phase 9 | Pending |
+| BOT-01 | Phase 4 + Phase 9 | Complete |
 | BOT-02 | Phase 5 | Pending |
 | BOT-03 | Phase 4 | Pending |
 | BOT-04 | Phase 5 | Pending |
