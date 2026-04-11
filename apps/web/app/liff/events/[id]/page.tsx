@@ -106,6 +106,7 @@ function LiffEventRegisterInner() {
   const isRegistered = currentMemberRegistrationId !== null;
   const isFull = registeredCount >= (event?.maxPlayers ?? 0);
   const isClosed = event?.status === "closed";
+  const isCancelled = event?.status === "cancelled";
 
   async function handleRegisterToggle() {
     setSubmitting(true);
@@ -207,9 +208,16 @@ function LiffEventRegisterInner() {
       <h1 className="text-2xl font-bold mb-6">ลงทะเบียน</h1>
 
       {/* Full state badge — per D-14 */}
-      {isFull && !isClosed && (
+      {isFull && !isClosed && !isCancelled && (
         <span className="inline-block mb-4 bg-destructive text-destructive-foreground px-2 py-1 rounded text-sm">
           เต็มแล้ว
+        </span>
+      )}
+
+      {/* Cancelled state badge — per D-08 */}
+      {isCancelled && (
+        <span className="inline-block mb-4 bg-destructive text-destructive-foreground px-2 py-1 rounded text-sm">
+          ยกเลิกแล้ว
         </span>
       )}
 
@@ -219,16 +227,21 @@ function LiffEventRegisterInner() {
           <p className="text-sm font-bold">{event.title}</p>
           <p className="text-sm text-muted-foreground">{formatDate(event.eventDate)}</p>
           {event.venueName && <p className="text-sm">{event.venueName}</p>}
+          {event.venueMapsUrl && (
+            <a href={event.venueMapsUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-primary underline">
+              Google Maps
+            </a>
+          )}
           <p className={`text-sm ${isFull ? "text-destructive" : "text-foreground"}`}>
             {registeredCount}/{event.maxPlayers} คน
           </p>
         </CardContent>
       </Card>
 
-      {/* Register/Cancel button — per D-01, D-03, D-14, D-16 */}
+      {/* Register/Cancel button — per D-01, D-03, D-08, D-14, D-16 */}
       <Button
         className="w-full min-h-[44px] mb-6"
-        disabled={submitting || (isFull && !isRegistered) || isClosed}
+        disabled={submitting || (isFull && !isRegistered) || isClosed || isCancelled}
         onClick={handleRegisterToggle}
       >
         {submitting ? (
@@ -236,6 +249,8 @@ function LiffEventRegisterInner() {
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             {isRegistered ? "กำลังยกเลิก..." : "กำลังลงทะเบียน..."}
           </>
+        ) : isCancelled ? (
+          "ยกเลิกแล้ว"
         ) : isClosed ? (
           "ปิดรับลงทะเบียนแล้ว"
         ) : isFull && !isRegistered ? (
