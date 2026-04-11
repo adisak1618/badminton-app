@@ -100,7 +100,7 @@ Plans:
 **Plans:** 2 plans
 Plans:
 - [x] 05-01-PLAN.md — Registration API routes, flex card repost builder, event status endpoint, integration tests
-- [ ] 05-02-PLAN.md — LIFF registration page with register/cancel/admin controls and human verification
+- [x] 05-02-PLAN.md — LIFF registration page with register/cancel/admin controls and human verification
 **UI hint**: yes
 
 ### Phase 6: Recurring Events
