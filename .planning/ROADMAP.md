@@ -124,7 +124,10 @@ Plans:
   1. The ClubForm component includes a homeCourtLocation text field — creating or editing a club submits this value to the API
   2. The club detail/settings page displays the homeCourtLocation value
   3. The club settings page has an "Unlink Group" button that calls DELETE /api/clubs/:id/link — after clicking, the club's line_group_id is cleared
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 07-01-PLAN.md — Add homeCourtLocation card to detail page and fix settings type
+- [ ] 07-02-PLAN.md — Add Unlink Group button with dialog to settings page and Toaster to layout
 
 ### Phase 8: Data Validation Fixes
 **Goal**: Fix API-DB validation mismatch for venueName and use validated env module for LIFF_ID
