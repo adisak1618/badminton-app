@@ -1,5 +1,6 @@
 import { pgTable, uuid, varchar, timestamp, integer, pgEnum } from "drizzle-orm/pg-core";
 import { clubs } from "./clubs";
+import { eventTemplates } from "./event-templates";
 
 export const eventStatusEnum = pgEnum("event_status", [
   "draft", "open", "closed", "cancelled"
@@ -8,6 +9,7 @@ export const eventStatusEnum = pgEnum("event_status", [
 export const events = pgTable("events", {
   id: uuid("id").primaryKey().defaultRandom(),
   clubId: uuid("club_id").references(() => clubs.id).notNull(),
+  templateId: uuid("template_id").references(() => eventTemplates.id),
   title: varchar("title", { length: 255 }).notNull(),
   eventDate: timestamp("event_date", { withTimezone: true }).notNull(),
   venueName: varchar("venue_name", { length: 255 }),

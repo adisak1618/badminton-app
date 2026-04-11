@@ -10,6 +10,7 @@ export const env = createEnv({
     SESSION_SECRET: z.string().min(32),
     WEB_BASE_URL: z.string().url(),
     LIFF_ID: z.string().min(1),
+    CRON_SECRET: z.string().min(32),
   },
   runtimeEnv: process.env,
 });
