@@ -116,7 +116,7 @@ export const cronRoutes = new Elysia({ prefix: "/cron" })
           courtFee: tpl.courtFee,
           maxPlayers: tpl.maxPlayers,
           registeredCount: 0,
-          registerLiffUrl: `${liffBase}/events/${newEvent.id}/register`,
+          registerLiffUrl: `${liffBase}/events/${newEvent.id}`,
           detailsLiffUrl: `${liffBase}/events/${newEvent.id}`,
         });
         try {

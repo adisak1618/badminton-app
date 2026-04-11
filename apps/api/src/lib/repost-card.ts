@@ -19,7 +19,7 @@ export async function repostFlexCard(opts: {
 
   // Build LIFF URLs
   const liffBase = `https://liff.line.me/${env.LIFF_ID}`;
-  const registerLiffUrl = `${liffBase}/events/${event.id}/register`;
+  const registerLiffUrl = `${liffBase}/events/${event.id}`;
   const detailsLiffUrl = `${liffBase}/events/${event.id}`;
 
   // Build alt text and card
@@ -29,6 +29,30 @@ export async function repostFlexCard(opts: {
     registeredCount,
     maxPlayers: event.maxPlayers,
   });
+
+  const remaining = event.maxPlayers - registeredCount;
+  const remainingText = remaining === 0 ? "เต็มแล้ว" : `เหลือ ${remaining} ที่`;
+
+  let notificationBodyText: string;
+  switch (action) {
+    case "register":
+      notificationBodyText = remaining === 0
+        ? `${memberName} ลงทะเบียนแล้ว (เต็มแล้ว)`
+        : `${memberName} ลงทะเบียนแล้ว (${remainingText})`;
+      break;
+    case "cancel":
+      notificationBodyText = `${memberName} ยกเลิกแล้ว (${remainingText})`;
+      break;
+    case "admin_remove":
+      notificationBodyText = `อัปเดตรายชื่อ (${remainingText})`;
+      break;
+    case "close":
+      notificationBodyText = `ปิดรับลงทะเบียนแล้ว`;
+      break;
+    case "reopen":
+      notificationBodyText = `เปิดรับลงทะเบียน (${remainingText})`;
+      break;
+  }
 
   const card = buildRepostFlexCard({
     title: event.title,
@@ -42,6 +66,7 @@ export async function repostFlexCard(opts: {
     registerLiffUrl,
     detailsLiffUrl,
     notificationAltText: altText,
+    notificationBodyText,
     isFull: registeredCount >= event.maxPlayers,
     isClosed: event.status === "closed",
   });

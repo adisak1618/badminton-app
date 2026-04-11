@@ -245,7 +245,7 @@ export const eventTemplateRoutes = new Elysia({ prefix: "/event-templates" })
         .returning();
 
       const liffBase = `https://liff.line.me/${env.LIFF_ID}`;
-      const registerLiffUrl = `${liffBase}/events/${created.id}/register`;
+      const registerLiffUrl = `${liffBase}/events/${created.id}`;
       const detailsLiffUrl = `${liffBase}/events/${created.id}`;
 
       const flexCard = buildEventFlexCard({
