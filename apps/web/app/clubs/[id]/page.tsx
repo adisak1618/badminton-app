@@ -94,7 +94,7 @@ export default async function ClubDetailPage({
           </CardHeader>
           <CardContent>
             <p className={`text-2xl font-bold ${!club.homeCourtLocation ? "text-muted-foreground" : ""}`}>
-              {club.homeCourtLocation ?? "Not set"}
+              {club.homeCourtLocation || "Not set"}
             </p>
           </CardContent>
         </Card>
