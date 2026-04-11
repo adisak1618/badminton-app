@@ -12,14 +12,14 @@ Six phases deliver a complete Line-native multi-tenant platform for Thai badmint
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Multi-tenant database schema, Drizzle migrations, and Line webhook skeleton with signature validation
-- [ ] **Phase 2: Club Setup** - Club creation on web, bot join event handler, group-to-club linking, and role management
-- [ ] **Phase 3: Member Identity** - LIFF bootstrap infrastructure, Line Login verification, one-time member profile, and iron-session
-- [ ] **Phase 4: Event Creation** - Admin creates one-time events via bot command and LIFF, bot posts Flex Message card to group
-- [ ] **Phase 5: Registration Loop** - Member registers via LIFF, live count, cancellation, admin remove, full/closed state
-- [ ] **Phase 6: Recurring Events** - Recurring event templates, auto-generate occurrences, configurable open window, per-occurrence overrides
-- [ ] **Phase 7: Club Setup UI Gaps** - Add homeCourtLocation to club forms and unlink group button to settings
-- [ ] **Phase 8: Data Validation Fixes** - Align venueName maxLength between API and DB, use validated env for LIFF_ID
+- [x] **Phase 1: Foundation** - Multi-tenant database schema, Drizzle migrations, and Line webhook skeleton with signature validation
+- [x] **Phase 2: Club Setup** - Club creation on web, bot join event handler, group-to-club linking, and role management
+- [x] **Phase 3: Member Identity** - LIFF bootstrap infrastructure, Line Login verification, one-time member profile, and iron-session
+- [x] **Phase 4: Event Creation** - Admin creates one-time events via bot command and LIFF, bot posts Flex Message card to group
+- [x] **Phase 5: Registration Loop** - Member registers via LIFF, live count, cancellation, admin remove, full/closed state
+- [x] **Phase 6: Recurring Events** - Recurring event templates, auto-generate occurrences, configurable open window, per-occurrence overrides
+- [x] **Phase 7: Club Setup UI Gaps** - Add homeCourtLocation to club forms and unlink group button to settings
+- [x] **Phase 8: Data Validation Fixes** - Align venueName maxLength between API and DB, use validated env for LIFF_ID
 - [ ] **Phase 9: Event Details Page** - LIFF event details page so Flex Message "Details" CTA resolves instead of 404
 - [ ] **Phase 10: Hybrid LIFF & Free Messaging** - Refactor LIFF pages for both LINE and browser, switch to free LIFF messaging
 - [ ] **Phase 11: Club Hub & Events List** - Club hub navigation page and events list with upcoming + weekly recurring schedule
@@ -54,10 +54,10 @@ Plans:
   5. Club default settings (fees, max players) pre-fill the event creation form
 **Plans:** 4 plans
 Plans:
-- [ ] 02-01-PLAN.md — UI infrastructure: shadcn/ui + Tailwind v4, iron-session, Line Login OAuth, Next.js middleware
-- [ ] 02-02-PLAN.md — API: error handling, auth middleware, club CRUD routes, member role management, group linking
-- [ ] 02-03-PLAN.md — Web dashboard: club list, create, settings, members/roles, group linking pages
-- [ ] 02-04-PLAN.md — Bot join event handler: Flex Message with setup link on group join
+- [x] 02-01-PLAN.md — UI infrastructure: shadcn/ui + Tailwind v4, iron-session, Line Login OAuth, Next.js middleware
+- [x] 02-02-PLAN.md — API: error handling, auth middleware, club CRUD routes, member role management, group linking
+- [x] 02-03-PLAN.md — Web dashboard: club list, create, settings, members/roles, group linking pages
+- [x] 02-04-PLAN.md — Bot join event handler: Flex Message with setup link on group join
 **UI hint**: yes
 
 ### Phase 3: Member Identity
@@ -85,7 +85,7 @@ Plans:
 Plans:
 - [x] 04-01-PLAN.md — Webhook text-message handler for bot commands (/create, /new, Thai aliases) with role check
 - [x] 04-02-PLAN.md — Event API routes (POST /events, GET /events/club-defaults) with Flex Message card builder and push
-- [ ] 04-03-PLAN.md — LIFF event creation form page with club defaults pre-fill, validation, and schema push
+- [x] 04-03-PLAN.md — LIFF event creation form page with club defaults pre-fill, validation, and schema push
 **UI hint**: yes
 
 ### Phase 5: Registration Loop
@@ -134,8 +134,8 @@ Plans:
   3. The club settings page has an "Unlink Group" button that calls DELETE /api/clubs/:id/link — after clicking, the club's line_group_id is cleared
 **Plans:** 2 plans
 Plans:
-- [ ] 07-01-PLAN.md — Add homeCourtLocation card to detail page and fix settings type
-- [ ] 07-02-PLAN.md — Add Unlink Group button with dialog to settings page and Toaster to layout
+- [x] 07-01-PLAN.md — Add homeCourtLocation card to detail page and fix settings type
+- [x] 07-02-PLAN.md — Add Unlink Group button with dialog to settings page and Toaster to layout
 
 ### Phase 8: Data Validation Fixes
 **Goal**: Fix API-DB validation mismatch for venueName and use validated env module for LIFF_ID
@@ -188,14 +188,14 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 3/3 | Verified | 2026-04-06 |
-| 2. Club Setup | 0/4 | Planning complete | - |
-| 3. Member Identity | 0/TBD | Not started | - |
-| 4. Event Creation | 0/3 | Planning complete | - |
-| 5. Registration Loop | 0/TBD | Not started | - |
-| 6. Recurring Events | 0/4 | Planning complete | - |
-| 7. Club Setup UI Gaps | 0/TBD | Not started | - |
-| 8. Data Validation Fixes | 0/TBD | Not started | - |
+| 1. Foundation | 3/3 | Complete | 2026-04-06 |
+| 2. Club Setup | 4/4 | Complete | 2026-04-06 |
+| 3. Member Identity | 2/2 | Complete | 2026-04-07 |
+| 4. Event Creation | 3/3 | Complete | 2026-04-07 |
+| 5. Registration Loop | 2/2 | Complete | 2026-04-08 |
+| 6. Recurring Events | 4/4 | Complete | 2026-04-11 |
+| 7. Club Setup UI Gaps | 2/2 | Complete | 2026-04-09 |
+| 8. Data Validation Fixes | 1/1 | Complete | 2026-04-09 |
 | 9. Event Details Page | 0/TBD | Not started | - |
 | 10. Hybrid LIFF & Free Messaging | 0/TBD | Not started | - |
 | 11. Club Hub & Events List | 0/TBD | Not started | - |
