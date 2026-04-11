@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
       .values({
         lineUserId: profile.sub,
         displayName: profile.name ?? "LINE User",
+        skillLevel: "beginner",
       })
       .returning();
     session.memberId = newMember.id;
