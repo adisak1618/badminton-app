@@ -32,6 +32,7 @@ export default function ClubSettingsPage() {
 
   const handleSubmit = async (data: {
     name: string;
+    homeCourtLocation?: string;
     defaultMaxPlayers: number;
     defaultShuttlecockFee: number;
     defaultCourtFee: number;
