@@ -21,6 +21,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 7: Club Setup UI Gaps** - Add homeCourtLocation to club forms and unlink group button to settings
 - [ ] **Phase 8: Data Validation Fixes** - Align venueName maxLength between API and DB, use validated env for LIFF_ID
 - [ ] **Phase 9: Event Details Page** - LIFF event details page so Flex Message "Details" CTA resolves instead of 404
+- [ ] **Phase 10: Hybrid LIFF & Free Messaging** - Refactor LIFF pages for both LINE and browser, switch to free LIFF messaging
+- [ ] **Phase 11: Club Hub & Events List** - Club hub navigation page and events list with upcoming + weekly recurring schedule
 
 ## Phase Details
 
@@ -157,6 +159,28 @@ Plans:
 **Plans**: TBD
 **UI hint**: yes
 
+### Phase 10: Hybrid LIFF & Free Messaging
+**Goal**: Refactor LIFF pages to work both inside LINE and in regular browsers, switch user-initiated actions from paid Messaging API pushMessage to free LIFF sendMessages/shareTargetPicker, and restructure URLs (remove /liff prefix)
+**Depends on**: Phase 9
+**Requirements**: TBD
+**Success Criteria** (what must be TRUE):
+  1. LiffProvider detects external browser and uses liff.login() — all LIFF pages load and function correctly in both LINE and regular browsers
+  2. User-initiated actions (register, cancel, create event) use liff.sendMessages() or shareTargetPicker instead of server-side pushMessage — no Messaging API cost for these flows
+  3. Server-side pushMessage is only used for cron-generated events (no user present)
+  4. URL structure no longer requires /liff prefix — pages are accessible at clean paths
+**Plans**: TBD
+
+### Phase 11: Club Hub & Events List
+**Goal**: Create a club hub page as the central navigation point and an events list page showing both upcoming events and recurring weekly schedule from active templates
+**Depends on**: Phase 6, Phase 10
+**Requirements**: TBD
+**Success Criteria** (what must be TRUE):
+  1. A club hub page exists with links to events, members, and settings
+  2. An events list page shows all upcoming events (one-time and generated from templates) sorted by date
+  3. The events list page displays a weekly schedule section derived from active templates (e.g. "ทุกวันจันทร์ 19:00 สนาม X")
+  4. Members can see the full recurring schedule even if events haven't been generated yet by cron
+**Plans**: TBD
+
 ## Progress
 
 **Execution Order:**
@@ -173,3 +197,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 7. Club Setup UI Gaps | 0/TBD | Not started | - |
 | 8. Data Validation Fixes | 0/TBD | Not started | - |
 | 9. Event Details Page | 0/TBD | Not started | - |
+| 10. Hybrid LIFF & Free Messaging | 0/TBD | Not started | - |
+| 11. Club Hub & Events List | 0/TBD | Not started | - |
