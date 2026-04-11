@@ -114,7 +114,12 @@ Plans:
   3. An admin can override an individual occurrence to change the venue, adjust fees, or cancel it — the change applies only to that occurrence, not the template
   4. A cancelled occurrence posts a cancellation notice to the group; the registration form for that occurrence shows as unavailable
   5. All occurrence scheduling uses Asia/Bangkok timezone — events open and post at the correct local time regardless of server timezone
-**Plans**: TBD
+**Plans:** 4 plans
+Plans:
+- [ ] 06-01-PLAN.md — Schema, template CRUD API, cancellation Flex builder, integration tests
+- [ ] 06-02-PLAN.md — Cron endpoint for auto-generating occurrences with Bangkok timezone logic
+- [ ] 06-03-PLAN.md — LIFF event creation form recurring toggle extension
+- [ ] 06-04-PLAN.md — Template management UI (list, edit, create-now, cancel occurrence)
 
 ### Phase 7: Club Setup UI Gaps
 **Goal**: Close audit gaps for CLUB-01 and CLUB-02 — homeCourtLocation field appears in all club UI forms and owners can unlink a Line group
@@ -164,7 +169,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. Member Identity | 0/TBD | Not started | - |
 | 4. Event Creation | 0/3 | Planning complete | - |
 | 5. Registration Loop | 0/TBD | Not started | - |
-| 6. Recurring Events | 0/TBD | Not started | - |
+| 6. Recurring Events | 0/4 | Planning complete | - |
 | 7. Club Setup UI Gaps | 0/TBD | Not started | - |
 | 8. Data Validation Fixes | 0/TBD | Not started | - |
 | 9. Event Details Page | 0/TBD | Not started | - |
