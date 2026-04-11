@@ -9,6 +9,7 @@ interface Club {
   id: string;
   name: string;
   lineGroupId: string | null;
+  homeCourtLocation: string | null;
   defaultMaxPlayers: number;
   defaultShuttlecockFee: number;
   defaultCourtFee: number;
@@ -54,7 +55,7 @@ export default async function ClubDetailPage({
 
       <Separator />
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -83,6 +84,18 @@ export default async function ClubDetailPage({
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">{club.defaultCourtFee} B</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-muted-foreground">
+              Home Court
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className={`text-2xl font-bold ${!club.homeCourtLocation ? "text-muted-foreground" : ""}`}>
+              {club.homeCourtLocation ?? "Not set"}
+            </p>
           </CardContent>
         </Card>
       </div>
