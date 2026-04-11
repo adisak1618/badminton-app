@@ -116,10 +116,10 @@ Plans:
   5. All occurrence scheduling uses Asia/Bangkok timezone — events open and post at the correct local time regardless of server timezone
 **Plans:** 4 plans
 Plans:
-- [ ] 06-01-PLAN.md — Schema, template CRUD API, cancellation Flex builder, integration tests
-- [ ] 06-02-PLAN.md — Cron endpoint for auto-generating occurrences with Bangkok timezone logic
-- [ ] 06-03-PLAN.md — LIFF event creation form recurring toggle extension
-- [ ] 06-04-PLAN.md — Template management UI (list, edit, create-now, cancel occurrence)
+- [x] 06-01-PLAN.md — Schema, template CRUD API, cancellation Flex builder, integration tests
+- [x] 06-02-PLAN.md — Cron endpoint for auto-generating occurrences with Bangkok timezone logic
+- [x] 06-03-PLAN.md — LIFF event creation form recurring toggle extension
+- [x] 06-04-PLAN.md — Template management UI (list, edit, create-now, cancel occurrence)
 
 ### Phase 7: Club Setup UI Gaps
 **Goal**: Close audit gaps for CLUB-01 and CLUB-02 — homeCourtLocation field appears in all club UI forms and owners can unlink a Line group
