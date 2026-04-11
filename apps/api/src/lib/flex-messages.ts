@@ -138,6 +138,33 @@ export function buildRepostAltText(opts: {
   }
 }
 
+interface CancellationCardData {
+  title: string;
+  eventDate: Date;
+  venueName: string;
+}
+
+export function buildCancellationFlexCard(data: CancellationCardData): messagingApi.FlexMessage {
+  return {
+    type: "flex",
+    altText: `ยกเลิกอีเวนท์: ${data.title}`,
+    contents: {
+      type: "bubble",
+      body: {
+        type: "box",
+        layout: "vertical",
+        contents: [
+          { type: "text", text: "ยกเลิกอีเวนท์", weight: "bold", color: "#ef4444", size: "lg" },
+          { type: "text", text: data.title, weight: "bold", size: "md", margin: "md" },
+          { type: "text", text: formatThaiDate(data.eventDate), size: "sm", color: "#666666", margin: "sm" },
+          { type: "text", text: data.venueName, size: "sm", color: "#666666", margin: "sm" },
+          { type: "text", text: "อีเวนท์นี้ถูกยกเลิกแล้ว", size: "sm", color: "#ef4444", margin: "lg" },
+        ],
+      },
+    },
+  };
+}
+
 export function buildRepostFlexCard(data: RepostCardData): messagingApi.FlexMessage {
   const formattedDate = formatThaiDate(data.eventDate);
   const feeText = `ลูกขน ${data.shuttlecockFee}฿ / สนาม ${data.courtFee}฿`;
