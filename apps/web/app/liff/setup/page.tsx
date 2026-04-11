@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useLiff } from "@/components/liff/liff-provider";
 import { ProfileForm } from "@/components/liff/profile-form";
@@ -10,6 +10,8 @@ import { Loader2 } from "lucide-react";
 export default function LiffSetupPage() {
   const { isReady, liff } = useLiff();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get("returnTo");
   const [defaultName, setDefaultName] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -49,7 +51,7 @@ export default function LiffSetupPage() {
       throw new Error(err.message);
     }
     toast.success("Profile saved");
-    router.replace("/liff/profile");
+    router.replace(returnTo || "/liff/profile");
   }
 
   return (

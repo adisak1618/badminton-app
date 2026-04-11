@@ -54,7 +54,13 @@ export function LiffProvider({
               body: JSON.stringify({ idToken }),
             })
               .then((res) => res.json())
-              .then(() => {
+              .then((data: { needsSetup?: boolean }) => {
+                if (data.needsSetup && !window.location.pathname.startsWith("/liff/setup")) {
+                  // Redirect to setup with return URL so user comes back after profile creation
+                  const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
+                  window.location.href = `/liff/setup?returnTo=${returnTo}`;
+                  return;
+                }
                 setIsLoggedIn(true);
                 setIsReady(true);
               })
