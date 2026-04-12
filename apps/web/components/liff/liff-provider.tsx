@@ -14,6 +14,7 @@ interface LiffContextValue {
   liffError: string | null;
   isReady: boolean;
   isLoggedIn: boolean;
+  isInClient: boolean;
 }
 
 const LiffContext = createContext<LiffContextValue>({
@@ -21,6 +22,7 @@ const LiffContext = createContext<LiffContextValue>({
   liffError: null,
   isReady: false,
   isLoggedIn: false,
+  isInClient: false,
 });
 
 export function LiffProvider({
@@ -34,6 +36,7 @@ export function LiffProvider({
   const [liffError, setLiffError] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isInClient, setIsInClient] = useState(false);
 
   useEffect(() => {
     // Dynamic import prevents SSR crash ("window is not defined" — RESEARCH.md Pitfall 1)
@@ -42,6 +45,14 @@ export function LiffProvider({
       .then((liffInstance) =>
         liffInstance.init({ liffId }).then(() => {
           setLiff(liffInstance);
+          setIsInClient(liffInstance.isInClient());
+
+          // External browser login: if not inside LINE app and not yet logged in,
+          // trigger LINE Login OAuth flow (RESEARCH.md Pattern 1, Pitfall 1)
+          if (!liffInstance.isInClient() && !liffInstance.isLoggedIn()) {
+            liffInstance.login({ redirectUri: window.location.href });
+            return; // redirect imminent
+          }
 
           // After LIFF init, get ID token and authenticate with our server
           // Per D-01: ID token is sent to /api/auth/liff (Next.js route handler, same origin)
@@ -55,10 +66,16 @@ export function LiffProvider({
             })
               .then((res) => res.json())
               .then((data: { needsSetup?: boolean }) => {
-                if (data.needsSetup && !window.location.pathname.startsWith("/liff/setup")) {
-                  // Redirect to setup with return URL so user comes back after profile creation
-                  const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
-                  window.location.href = `/liff/setup?returnTo=${returnTo}`;
+                // Validate returnTo to prevent open redirect (T-10-02)
+                const isRelativePath = (path: string) =>
+                  path.startsWith("/") && !path.includes("://");
+
+                if (data.needsSetup && !window.location.pathname.startsWith("/setup")) {
+                  const rawReturnTo = window.location.pathname + window.location.search;
+                  const returnTo = isRelativePath(rawReturnTo)
+                    ? encodeURIComponent(rawReturnTo)
+                    : encodeURIComponent("/");
+                  window.location.href = `/setup?returnTo=${returnTo}`;
                   return;
                 }
                 setIsLoggedIn(true);
@@ -69,10 +86,7 @@ export function LiffProvider({
                 setIsReady(true);
               });
           } else {
-            // Per D-03: no browser fallback — require LINE environment
-            setLiffError(
-              "Could not get ID token. Please ensure this page is opened inside LINE."
-            );
+            setLiffError("Could not get ID token.");
             setIsReady(true);
           }
         })
@@ -84,7 +98,7 @@ export function LiffProvider({
   }, [liffId]);
 
   return (
-    <LiffContext.Provider value={{ liff, liffError, isReady, isLoggedIn }}>
+    <LiffContext.Provider value={{ liff, liffError, isReady, isLoggedIn, isInClient }}>
       {children}
     </LiffContext.Provider>
   );
