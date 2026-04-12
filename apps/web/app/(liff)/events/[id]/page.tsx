@@ -17,6 +17,8 @@ interface EventData {
   venueMapsUrl: string | null;
   status: "open" | "closed" | "cancelled";
   maxPlayers: number;
+  shuttlecockFee: number;
+  courtFee: number;
   clubId: string;
 }
 
@@ -244,6 +246,10 @@ function LiffEventRegisterInner() {
           <p className={`text-sm ${isFull ? "text-destructive" : "text-foreground"}`}>
             {registeredCount}/{event.maxPlayers} คน
           </p>
+          <div className="flex gap-3 text-sm text-muted-foreground">
+            <span>ลูก {event.shuttlecockFee}฿</span>
+            <span>สนาม {event.courtFee}฿</span>
+          </div>
         </CardContent>
       </Card>
 

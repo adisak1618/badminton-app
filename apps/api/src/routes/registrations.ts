@@ -81,6 +81,8 @@ export const registrationRoutes = new Elysia({ prefix: "/registrations" })
           venueMapsUrl: event.venueMapsUrl,
           status: event.status,
           maxPlayers: event.maxPlayers,
+          shuttlecockFee: event.shuttlecockFee,
+          courtFee: event.courtFee,
           clubId: event.clubId,
         },
         registrations: regList.map((r) => ({
