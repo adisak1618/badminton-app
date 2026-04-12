@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useLiff } from "@/components/liff/liff-provider";
+import { getLiffContextHeader, trySendMessages } from "@/lib/liff-messaging";
 import {
   eventCreateSchema,
   type EventCreateFormData,
@@ -197,7 +198,7 @@ function LiffEventCreateForm() {
 
     const res = await fetch("/api/proxy/events", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...getLiffContextHeader(liff) },
       body: JSON.stringify(body),
     });
 
@@ -209,6 +210,9 @@ function LiffEventCreateForm() {
       toast.error("สร้างอีเวนท์ไม่สำเร็จ กรุณาลองใหม่");
       return;
     }
+
+    const eventData = (await res.json()) as { id?: string; flexCard?: unknown };
+    await trySendMessages(liff, eventData.flexCard);
 
     toast.success("สร้างอีเวนท์สำเร็จ");
     setTimeout(() => {

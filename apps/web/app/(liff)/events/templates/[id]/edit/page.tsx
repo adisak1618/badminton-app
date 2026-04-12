@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useLiff } from "@/components/liff/liff-provider";
+import { getLiffContextHeader, trySendMessages } from "@/lib/liff-messaging";
 import { templateCreateSchema, type TemplateCreateFormData } from "@/lib/validations/event";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
@@ -79,7 +80,7 @@ export default function TemplateEditPage() {
 }
 
 function TemplateEditForm() {
-  const { isReady, isLoggedIn } = useLiff();
+  const { liff, isReady, isLoggedIn } = useLiff();
   const searchParams = useSearchParams();
   const params = useParams<{ id: string }>();
   const clubId = searchParams.get("clubId");
@@ -195,12 +196,14 @@ function TemplateEditForm() {
         `/api/proxy/event-templates/${templateId}/occurrences/${eventId}/cancel`,
         {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...getLiffContextHeader(liff) },
         },
       );
       if (!res.ok) {
         toast.error("ยกเลิกไม่สำเร็จ กรุณาลองใหม่");
       } else {
+        const data = (await res.json()) as { flexCard?: unknown };
+        await trySendMessages(liff, data.flexCard);
         toast.success("ยกเลิกอีเวนท์สำเร็จ");
         setOccurrences((prev) => prev.filter((e) => e.id !== eventId));
       }
