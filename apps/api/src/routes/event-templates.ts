@@ -198,7 +198,7 @@ export const eventTemplateRoutes = new Elysia({ prefix: "/event-templates" })
   // POST /event-templates/:id/create-now — D-04 manual occurrence creation
   .post(
     "/:id/create-now",
-    async ({ params, session, set }) => {
+    async ({ params, session, set, request }) => {
       if (!session.lineUserId) throw new Error("Session missing lineUserId");
       const [member] = await db
         .select()
@@ -261,19 +261,27 @@ export const eventTemplateRoutes = new Elysia({ prefix: "/event-templates" })
         detailsLiffUrl,
       });
 
-      let lineMessageId: string | null = null;
-      try {
-        const pushResponse = await lineClient.pushMessage({
-          to: club.lineGroupId!,
-          messages: [flexCard],
-        });
-        lineMessageId = pushResponse.sentMessages[0]?.id ?? null;
-      } catch (err) {
-        console.error("Failed to push Flex Message:", (err as Error).message);
-      }
+      const liffContext = request.headers.get("x-liff-context");
 
-      if (lineMessageId) {
-        await db.update(events).set({ lineMessageId }).where(eq(events.id, created.id));
+      let lineMessageId: string | null = null;
+      let responseFlexCard = null;
+      if (!liffContext || liffContext === "external") {
+        try {
+          const pushResponse = await lineClient.pushMessage({
+            to: club.lineGroupId!,
+            messages: [flexCard],
+          });
+          lineMessageId = pushResponse.sentMessages[0]?.id ?? null;
+        } catch (err) {
+          console.error("Failed to push Flex Message:", (err as Error).message);
+        }
+
+        if (lineMessageId) {
+          await db.update(events).set({ lineMessageId }).where(eq(events.id, created.id));
+        }
+      } else {
+        // In-LINE: return card for client-side sendMessages
+        responseFlexCard = flexCard;
       }
 
       set.status = 201;
@@ -284,6 +292,7 @@ export const eventTemplateRoutes = new Elysia({ prefix: "/event-templates" })
         templateId: created.templateId,
         status: created.status,
         lineMessageId,
+        flexCard: responseFlexCard,
       };
     },
     {
@@ -294,7 +303,7 @@ export const eventTemplateRoutes = new Elysia({ prefix: "/event-templates" })
   // PATCH /event-templates/:id/occurrences/:eventId/cancel — D-12
   .patch(
     "/:id/occurrences/:eventId/cancel",
-    async ({ params, session }) => {
+    async ({ params, session, request }) => {
       if (!session.lineUserId) throw new Error("Session missing lineUserId");
       const [member] = await db
         .select()
@@ -329,23 +338,31 @@ export const eventTemplateRoutes = new Elysia({ prefix: "/event-templates" })
         .from(clubs)
         .where(eq(clubs.id, event.clubId));
 
+      const liffContext = request.headers.get("x-liff-context");
+      let responseCancellationCard = null;
+
       if (club?.lineGroupId) {
         const cancellationCard = buildCancellationFlexCard({
           title: event.title,
           eventDate: event.eventDate,
           venueName: event.venueName ?? template.venueName,
         });
-        try {
-          await lineClient.pushMessage({
-            to: club.lineGroupId,
-            messages: [cancellationCard],
-          });
-        } catch (err) {
-          console.error("Failed to push cancellation Flex Message:", (err as Error).message);
+        if (!liffContext || liffContext === "external") {
+          try {
+            await lineClient.pushMessage({
+              to: club.lineGroupId,
+              messages: [cancellationCard],
+            });
+          } catch (err) {
+            console.error("Failed to push cancellation Flex Message:", (err as Error).message);
+          }
+        } else {
+          // In-LINE: return card for client-side sendMessages
+          responseCancellationCard = cancellationCard;
         }
       }
 
-      return { status: "cancelled", eventId: params.eventId };
+      return { status: "cancelled", eventId: params.eventId, flexCard: responseCancellationCard };
     },
     {
       params: t.Object({

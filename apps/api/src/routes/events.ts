@@ -42,7 +42,7 @@ export const eventRoutes = new Elysia({ prefix: "/events" })
   // POST /events — create event + push Flex Message to LINE group (EVNT-01, BOT-01)
   .post(
     "/",
-    async ({ body, session, set }) => {
+    async ({ body, session, set, request }) => {
       if (!session.lineUserId) {
         throw new Error("Session missing lineUserId");
       }
@@ -110,33 +110,43 @@ export const eventRoutes = new Elysia({ prefix: "/events" })
         detailsLiffUrl,
       });
 
+      const liffContext = request.headers.get("x-liff-context");
+
       // Push to LINE group — D-13: posted once, store lineMessageId
+      // Skip push if admin is creating event from inside LINE (client will sendMessages)
       let lineMessageId: string | null = null;
-      try {
-        const pushResponse = await lineClient.pushMessage({
-          to: club.lineGroupId!,
-          messages: [flexCard],
-        });
-        lineMessageId = pushResponse.sentMessages[0]?.id ?? null;
-        if (!lineMessageId) {
-          console.warn(
-            "pushMessage succeeded but returned no sentMessages[0].id"
+      let responseFlexCard = null;
+      if (!liffContext || liffContext === "external") {
+        try {
+          const pushResponse = await lineClient.pushMessage({
+            to: club.lineGroupId!,
+            messages: [flexCard],
+          });
+          lineMessageId = pushResponse.sentMessages[0]?.id ?? null;
+          if (!lineMessageId) {
+            console.warn(
+              "pushMessage succeeded but returned no sentMessages[0].id"
+            );
+          }
+        } catch (err) {
+          // Log but don't rollback — event is saved, card just wasn't posted (Pitfall 3)
+          console.error(
+            "Failed to push Flex Message to group:",
+            (err as Error).message
           );
         }
-      } catch (err) {
-        // Log but don't rollback — event is saved, card just wasn't posted (Pitfall 3)
-        console.error(
-          "Failed to push Flex Message to group:",
-          (err as Error).message
-        );
-      }
 
-      // Update event with lineMessageId (D-13)
-      if (lineMessageId) {
-        await db
-          .update(events)
-          .set({ lineMessageId })
-          .where(eq(events.id, created.id));
+        // Update event with lineMessageId (D-13)
+        if (lineMessageId) {
+          await db
+            .update(events)
+            .set({ lineMessageId })
+            .where(eq(events.id, created.id));
+        }
+      } else {
+        // In-LINE: return card for client-side sendMessages (D-06)
+        responseFlexCard = flexCard;
+        // lineMessageId stays null — card sent via sendMessages has no trackable ID
       }
 
       set.status = 201;
@@ -147,6 +157,7 @@ export const eventRoutes = new Elysia({ prefix: "/events" })
         venueName: created.venueName,
         status: created.status,
         lineMessageId,
+        flexCard: responseFlexCard,
       };
     },
     {
