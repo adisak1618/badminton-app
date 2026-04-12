@@ -4,6 +4,7 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { useLiff } from "@/components/liff/liff-provider";
+import { getLiffContextHeader, trySendMessages } from "@/lib/liff-messaging";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { Loader2, X } from "lucide-react";
@@ -58,7 +59,7 @@ export default function LiffEventRegisterPage() {
 }
 
 function LiffEventRegisterInner() {
-  const { isReady, isLoggedIn } = useLiff();
+  const { liff, isReady, isLoggedIn } = useLiff();
   const { id: eventId } = useParams<{ id: string }>();
 
   const [loading, setLoading] = useState(true);
@@ -114,8 +115,11 @@ function LiffEventRegisterInner() {
       if (isRegistered) {
         const res = await fetch(`/api/proxy/registrations/${currentMemberRegistrationId}`, {
           method: "DELETE",
+          headers: { ...getLiffContextHeader(liff) },
         });
         if (res.ok) {
+          const data = (await res.json()) as { registeredCount?: number; flexCard?: unknown };
+          await trySendMessages(liff, data.flexCard);
           toast.success("ยกเลิกสำเร็จ");
           await fetchData();
         } else {
@@ -125,10 +129,12 @@ function LiffEventRegisterInner() {
       } else {
         const res = await fetch("/api/proxy/registrations", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...getLiffContextHeader(liff) },
           body: JSON.stringify({ eventId }),
         });
         if (res.status === 201) {
+          const data = (await res.json()) as { id?: string; registeredCount?: number; flexCard?: unknown };
+          await trySendMessages(liff, data.flexCard);
           toast.success("ลงทะเบียนสำเร็จ");
           await fetchData();
         } else if (res.status === 409) {
@@ -155,8 +161,11 @@ function LiffEventRegisterInner() {
     try {
       const res = await fetch(`/api/proxy/registrations/${registrationId}`, {
         method: "DELETE",
+        headers: { ...getLiffContextHeader(liff) },
       });
       if (res.ok) {
+        const data = (await res.json()) as { registeredCount?: number; flexCard?: unknown };
+        await trySendMessages(liff, data.flexCard);
         toast.success("ลบสำเร็จ");
         await fetchData();
       } else {
