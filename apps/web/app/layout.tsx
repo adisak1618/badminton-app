@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Nav } from "@/components/nav";
 import { Toaster } from "@repo/ui/components/sonner";
+import { LiffProvider } from "@/components/liff/liff-provider";
+import { env } from "@/lib/env";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,11 +18,11 @@ export default function RootLayout({
   return (
     <html lang="th">
       <body className="min-h-screen bg-background antialiased">
-        <Nav />
-        <main className="mx-auto max-w-5xl px-4 py-8">
-          {children}
-        </main>
-        <Toaster />
+        <LiffProvider liffId={env.NEXT_PUBLIC_LIFF_ID}>
+          <Nav />
+          <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
+          <Toaster />
+        </LiffProvider>
       </body>
     </html>
   );
