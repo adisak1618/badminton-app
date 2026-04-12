@@ -21,7 +21,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 7: Club Setup UI Gaps** - Add homeCourtLocation to club forms and unlink group button to settings
 - [x] **Phase 8: Data Validation Fixes** - Align venueName maxLength between API and DB, use validated env for LIFF_ID
 - [ ] **Phase 9: Event Details Page** - LIFF event details page so Flex Message "Details" CTA resolves instead of 404
-- [ ] **Phase 10: Hybrid LIFF & Free Messaging** - Refactor LIFF pages for both LINE and browser, switch to free LIFF messaging
+- [x] **Phase 10: Hybrid LIFF & Free Messaging** - Refactor LIFF pages for both LINE and browser, switch to free LIFF messaging (completed 2026-04-12)
 - [ ] **Phase 11: Club Hub & Events List** - Club hub navigation page and events list with upcoming + weekly recurring schedule
 
 ## Phase Details
@@ -170,11 +170,11 @@ Plans:
   2. User-initiated actions (register, cancel, create event) use liff.sendMessages() or shareTargetPicker instead of server-side pushMessage — no Messaging API cost for these flows
   3. Server-side pushMessage is only used for cron-generated events (no user present)
   4. URL structure no longer requires /liff prefix — pages are accessible at clean paths
-**Plans:** 3 plans
+**Plans:** 3/3 plans complete
 Plans:
-- [ ] 10-01-PLAN.md — LiffProvider external browser support, root layout, page restructuring with (liff) route group and 301 redirects
-- [ ] 10-02-PLAN.md — API routes return flexCard JSON, conditional pushMessage skip via X-Liff-Context header
-- [ ] 10-03-PLAN.md — Client-side sendMessages integration for register, cancel, create event actions
+- [x] 10-01-PLAN.md — LiffProvider external browser support, root layout, page restructuring with (liff) route group and 301 redirects
+- [x] 10-02-PLAN.md — API routes return flexCard JSON, conditional pushMessage skip via X-Liff-Context header
+- [x] 10-03-PLAN.md — Client-side sendMessages integration for register, cancel, create event actions
 
 ### Phase 11: Club Hub & Events List
 **Goal**: Create a club hub page as the central navigation point and an events list page showing both upcoming events and recurring weekly schedule from active templates
@@ -203,5 +203,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 7. Club Setup UI Gaps | 2/2 | Complete | 2026-04-09 |
 | 8. Data Validation Fixes | 1/1 | Complete | 2026-04-09 |
 | 9. Event Details Page | 1/2 | In Progress|  |
-| 10. Hybrid LIFF & Free Messaging | 0/3 | Not started | - |
+| 10. Hybrid LIFF & Free Messaging | 3/3 | Complete    | 2026-04-12 |
 | 11. Club Hub & Events List | 0/TBD | Not started | - |
