@@ -3,6 +3,7 @@ import { getIronSession } from "iron-session";
 import type { SessionData } from "@/lib/session";
 import { sessionOptions } from "@/lib/session";
 import Link from "next/link";
+import { LogoutButton } from "./logout-button";
 
 export async function Nav() {
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
@@ -25,12 +26,7 @@ export async function Nav() {
               <span className="text-sm text-muted-foreground">
                 {session.displayName}
               </span>
-              <a
-                href="/api/auth/logout"
-                className="text-sm text-muted-foreground hover:text-foreground"
-              >
-                Logout
-              </a>
+              <LogoutButton />
             </>
           ) : (
             <a
