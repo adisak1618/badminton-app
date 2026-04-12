@@ -179,13 +179,16 @@ Plans:
 ### Phase 11: Club Hub & Events List
 **Goal**: Create a club hub page as the central navigation point and an events list page showing both upcoming events and recurring weekly schedule from active templates
 **Depends on**: Phase 6, Phase 10
-**Requirements**: TBD
+**Requirements**: HUB-01, HUB-02, HUB-03, HUB-04
 **Success Criteria** (what must be TRUE):
   1. A club hub page exists with links to events, members, and settings
   2. An events list page shows all upcoming events (one-time and generated from templates) sorted by date
   3. The events list page displays a weekly schedule section derived from active templates (e.g. "ทุกวันจันทร์ 19:00 สนาม X")
   4. Members can see the full recurring schedule even if events haven't been generated yet by cron
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 11-01-PLAN.md — API events list endpoint + website club hub transformation
+- [ ] 11-02-PLAN.md — LIFF club hub client component for in-LINE access
 
 ## Progress
 
@@ -204,4 +207,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 8. Data Validation Fixes | 1/1 | Complete | 2026-04-09 |
 | 9. Event Details Page | 1/2 | In Progress|  |
 | 10. Hybrid LIFF & Free Messaging | 3/3 | Complete    | 2026-04-12 |
-| 11. Club Hub & Events List | 0/TBD | Not started | - |
+| 11. Club Hub & Events List | 0/2 | Not started | - |
