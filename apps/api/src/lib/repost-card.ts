@@ -3,19 +3,20 @@ import { eq, count } from "drizzle-orm";
 import { lineClient } from "./line-client";
 import { buildRepostFlexCard, buildRepostAltText } from "./flex-messages";
 import { env } from "../env";
+import { messagingApi } from "@line/bot-sdk";
 
-export async function repostFlexCard(opts: {
+export async function buildFlexCardData(opts: {
   event: typeof events.$inferSelect;
   clubId: string;
   action: "register" | "cancel" | "admin_remove" | "close" | "reopen";
   memberName?: string;
   registeredCount: number;
-}): Promise<void> {
+}): Promise<{ card: messagingApi.FlexMessage; altText: string; club: { lineGroupId: string } } | null> {
   const { event, clubId, action, memberName, registeredCount } = opts;
 
   // Fetch club for lineGroupId
   const [club] = await db.select().from(clubs).where(eq(clubs.id, clubId));
-  if (!club?.lineGroupId) return;
+  if (!club?.lineGroupId) return null;
 
   // Build LIFF URLs
   const liffBase = `https://liff.line.me/${env.LIFF_ID}`;
@@ -69,7 +70,22 @@ export async function repostFlexCard(opts: {
     notificationBodyText,
     isFull: registeredCount >= event.maxPlayers,
     isClosed: event.status === "closed",
-  });
+  }) as messagingApi.FlexMessage;
+
+  return { card, altText, club: { lineGroupId: club.lineGroupId } };
+}
+
+export async function repostFlexCard(opts: {
+  event: typeof events.$inferSelect;
+  clubId: string;
+  action: "register" | "cancel" | "admin_remove" | "close" | "reopen";
+  memberName?: string;
+  registeredCount: number;
+}): Promise<void> {
+  const cardData = await buildFlexCardData(opts);
+  if (!cardData) return;
+
+  const { card, altText, club } = cardData;
 
   // Best-effort push — never throw (D-09)
   try {
@@ -82,7 +98,7 @@ export async function repostFlexCard(opts: {
       await db
         .update(events)
         .set({ lineMessageId: newLineMessageId })
-        .where(eq(events.id, event.id));
+        .where(eq(events.id, opts.event.id));
     }
   } catch (err) {
     console.error("Failed to repost Flex Message:", (err as Error).message);

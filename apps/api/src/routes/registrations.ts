@@ -4,7 +4,29 @@ import { eq, count, and } from "drizzle-orm";
 import { authMiddleware } from "../middleware/auth";
 import { requireClubRole } from "../lib/require-club-role";
 import { notFound, ApiError } from "../lib/errors";
-import { repostFlexCard } from "../lib/repost-card";
+import { buildFlexCardData } from "../lib/repost-card";
+import { lineClient } from "../lib/line-client";
+
+async function pushCardToGroup(
+  cardData: NonNullable<Awaited<ReturnType<typeof buildFlexCardData>>>,
+  eventId: string
+): Promise<void> {
+  try {
+    const pushResponse = await lineClient.pushMessage({
+      to: cardData.club.lineGroupId,
+      messages: [cardData.card],
+    });
+    const newLineMessageId = pushResponse.sentMessages[0]?.id ?? null;
+    if (newLineMessageId) {
+      await db
+        .update(events)
+        .set({ lineMessageId: newLineMessageId })
+        .where(eq(events.id, eventId));
+    }
+  } catch (err) {
+    console.error("Failed to repost Flex Message:", (err as Error).message);
+  }
+}
 
 export const registrationRoutes = new Elysia({ prefix: "/registrations" })
   .use(authMiddleware)
@@ -77,7 +99,7 @@ export const registrationRoutes = new Elysia({ prefix: "/registrations" })
   // POST /registrations — register member (REG-01, BOT-02)
   .post(
     "/",
-    async ({ body, session, set }) => {
+    async ({ body, session, set, request }) => {
       const [member] = await db
         .select()
         .from(members)
@@ -127,8 +149,10 @@ export const registrationRoutes = new Elysia({ prefix: "/registrations" })
         .from(registrations)
         .where(eq(registrations.eventId, body.eventId));
 
-      // Repost flex card (best-effort)
-      await repostFlexCard({
+      const liffContext = request.headers.get("x-liff-context");
+
+      // Build card data for either response or push
+      const cardData = await buildFlexCardData({
         event,
         clubId: event.clubId,
         action: "register",
@@ -136,8 +160,17 @@ export const registrationRoutes = new Elysia({ prefix: "/registrations" })
         registeredCount: Number(newCount),
       });
 
+      let flexCard = null;
+      if (!liffContext || liffContext === "external") {
+        // External browser or no context — server pushes to group
+        if (cardData) await pushCardToGroup(cardData, event.id);
+      } else {
+        // In-LINE context — skip server push, return card for client sendMessages
+        flexCard = cardData?.card ?? null;
+      }
+
       set.status = 201;
-      return { id: regId, registeredCount: Number(newCount) };
+      return { id: regId, registeredCount: Number(newCount), flexCard };
     },
     { body: t.Object({ eventId: t.String({ format: "uuid" }) }) }
   )
@@ -145,7 +178,7 @@ export const registrationRoutes = new Elysia({ prefix: "/registrations" })
   // DELETE /registrations/:registrationId — cancel own or admin remove (REG-03, REG-05)
   .delete(
     "/:registrationId",
-    async ({ params, session }) => {
+    async ({ params, session, request }) => {
       const [registration] = await db
         .select()
         .from(registrations)
@@ -191,8 +224,10 @@ export const registrationRoutes = new Elysia({ prefix: "/registrations" })
         .from(registrations)
         .where(eq(registrations.eventId, registration.eventId));
 
-      // Repost flex card
-      await repostFlexCard({
+      const liffContext = request.headers.get("x-liff-context");
+
+      // Build card data
+      const cardData = await buildFlexCardData({
         event,
         clubId: event.clubId,
         action: isAdminRemove ? "admin_remove" : "cancel",
@@ -200,7 +235,16 @@ export const registrationRoutes = new Elysia({ prefix: "/registrations" })
         registeredCount: Number(newCount),
       });
 
-      return { registeredCount: Number(newCount) };
+      let flexCard = null;
+      if (!liffContext || liffContext === "external") {
+        // External browser or no context — server pushes to group
+        if (cardData) await pushCardToGroup(cardData, event.id);
+      } else {
+        // In-LINE context — skip server push, return card for client sendMessages
+        flexCard = cardData?.card ?? null;
+      }
+
+      return { registeredCount: Number(newCount), flexCard };
     },
     {
       params: t.Object({ registrationId: t.String({ format: "uuid" }) }),
