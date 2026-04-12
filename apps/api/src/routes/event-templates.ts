@@ -47,7 +47,7 @@ export const eventTemplateRoutes = new Elysia({ prefix: "/event-templates" })
         .from(members)
         .where(eq(members.lineUserId, session.lineUserId));
       if (!member) throw notFound("Member");
-      await requireClubRole(query.clubId, member.id, ["owner", "admin"]);
+      await requireClubRole(query.clubId, member.id, ["owner", "admin", "member"]);
 
       const templates = await db
         .select()

@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import { db, events, clubs, members, registrations } from "@repo/db";
-import { eq, count } from "drizzle-orm";
+import { eq, count, and, gte, asc } from "drizzle-orm";
 import { repostFlexCard } from "../lib/repost-card";
 import { authMiddleware } from "../middleware/auth";
 import { requireClubRole } from "../lib/require-club-role";
@@ -11,6 +11,47 @@ import { env } from "../env";
 
 export const eventRoutes = new Elysia({ prefix: "/events" })
   .use(authMiddleware)
+  // GET /events?clubId=:id — list upcoming open events with registeredCount (HUB-01)
+  .get(
+    "/",
+    async ({ query, session }) => {
+      if (!session.lineUserId) throw new Error("Session missing lineUserId");
+      const [member] = await db
+        .select()
+        .from(members)
+        .where(eq(members.lineUserId, session.lineUserId));
+      if (!member) throw notFound("Member");
+      await requireClubRole(query.clubId, member.id, ["owner", "admin", "member"]);
+
+      const rows = await db
+        .select({
+          id: events.id,
+          title: events.title,
+          eventDate: events.eventDate,
+          venueName: events.venueName,
+          venueMapsUrl: events.venueMapsUrl,
+          shuttlecockFee: events.shuttlecockFee,
+          courtFee: events.courtFee,
+          maxPlayers: events.maxPlayers,
+          status: events.status,
+          registeredCount: count(registrations.id),
+        })
+        .from(events)
+        .leftJoin(registrations, eq(registrations.eventId, events.id))
+        .where(
+          and(
+            eq(events.clubId, query.clubId),
+            eq(events.status, "open"),
+            gte(events.eventDate, new Date())
+          )
+        )
+        .groupBy(events.id)
+        .orderBy(asc(events.eventDate));
+
+      return rows.map((r) => ({ ...r, registeredCount: Number(r.registeredCount) }));
+    },
+    { query: t.Object({ clubId: t.String({ format: "uuid" }) }) }
+  )
   // GET /events/club-defaults?clubId=:id — returns club defaults for pre-fill (EVNT-02)
   .get(
     "/club-defaults",
