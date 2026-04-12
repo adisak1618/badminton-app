@@ -349,14 +349,14 @@ Step 2.6: SKIPPED — this phase is purely code changes, no new external depende
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Registration flow from website hub (non-LIFF)**
+1. **Registration flow from website hub (non-LIFF)** (RESOLVED)
    - What we know: The website `/clubs/[id]` is server-rendered; the register button on event cards needs to go somewhere.
    - What's unclear: Should the register button on the website version link to the LIFF URL (`liff.line.me/...`) or to a web-only registration page?
    - Recommendation: CONTEXT.md says "Register button → links to existing `/(liff)/events/[id]` or inline registration." Since no web registration page exists, link to the LIFF URL for now. Claude's discretion applies.
 
-2. **Auth requirement for club hub**
+2. **Auth requirement for club hub** (RESOLVED)
    - What we know: The current `/clubs/[id]` throws if the user is not logged in (apiClient requires session cookie).
    - What's unclear: Should the hub be publicly viewable or member-only?
    - Recommendation: Keep member-only (consistent with current behavior). No change needed.
