@@ -89,9 +89,6 @@ export default async function ClubDetailPage({
         <Button variant="outline" className="min-h-[44px]" asChild>
           <Link href={`#events`}>อีเวนต์</Link>
         </Button>
-        <Button variant="outline" className="min-h-[44px]" asChild>
-          <Link href={`#schedule`}>ตาราง</Link>
-        </Button>
         {isAdminOrOwner && (
           <>
             <Button variant="outline" className="min-h-[44px]" asChild>
@@ -139,33 +136,33 @@ export default async function ClubDetailPage({
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
             {eventsList.map((event) => (
-              <Card key={event.id}>
-                <CardContent className="pt-6 space-y-3">
-                  <p className="text-xl font-semibold">{formatDate(event.eventDate)}</p>
-                  <p className="text-sm">{event.venueName}</p>
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 flex-1 rounded-full bg-muted">
-                      <div
-                        className="h-2 rounded-full bg-primary"
-                        style={{ width: `${Math.min((event.registeredCount / event.maxPlayers) * 100, 100)}%` }}
-                      />
+              <Link key={event.id} href={`/events/${event.id}`} className="block">
+                <Card className="transition-colors hover:bg-muted/50">
+                  <CardContent className="pt-6 space-y-3">
+                    <p className="text-xl font-semibold">{formatDate(event.eventDate)}</p>
+                    <p className="text-sm">{event.venueName}</p>
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 flex-1 rounded-full bg-muted">
+                        <div
+                          className="h-2 rounded-full bg-primary"
+                          style={{ width: `${Math.min((event.registeredCount / event.maxPlayers) * 100, 100)}%` }}
+                        />
+                      </div>
+                      <span className="text-sm text-muted-foreground">
+                        {event.registeredCount}/{event.maxPlayers} คน
+                      </span>
                     </div>
-                    <span className="text-sm text-muted-foreground">
-                      {event.registeredCount}/{event.maxPlayers} คน
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    ลูก {event.shuttlecockFee}฿ · สนาม {event.courtFee}฿
-                  </p>
-                  {event.registeredCount >= event.maxPlayers ? (
-                    <Badge variant="secondary" className="w-full justify-center min-h-[44px]">เต็มแล้ว</Badge>
-                  ) : (
-                    <Button className="w-full min-h-[44px]" asChild>
-                      <Link href={`/events/${event.id}`}>ลงทะเบียน</Link>
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                      <span>ลูก {event.shuttlecockFee}฿</span>
+                      <span>สนาม {event.courtFee}฿</span>
+                      <span>สูงสุด {event.maxPlayers} คน</span>
+                    </div>
+                    {event.registeredCount >= event.maxPlayers && (
+                      <Badge variant="secondary" className="w-full justify-center min-h-[44px]">เต็มแล้ว</Badge>
+                    )}
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         )}
