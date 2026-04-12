@@ -39,62 +39,73 @@ export function LiffProvider({
   const [isInClient, setIsInClient] = useState(false);
 
   useEffect(() => {
-    // Dynamic import prevents SSR crash ("window is not defined" — RESEARCH.md Pitfall 1)
-    import("@line/liff")
-      .then((mod) => mod.default)
-      .then((liffInstance) =>
-        liffInstance.init({ liffId }).then(() => {
+    const init = async () => {
+      try {
+        // Check if user already has a valid app session (e.g. logged in via LINE Login OAuth)
+        // before running LIFF init — avoids redundant liff.login() redirect
+        const sessionRes = await fetch("/api/auth/session");
+        const session: { isLoggedIn: boolean } = await sessionRes.json();
+
+        if (session.isLoggedIn) {
+          // Already authenticated — init LIFF silently for sendMessages but skip login
+          const liffModule = await import("@line/liff");
+          const liffInstance = liffModule.default;
+          await liffInstance.init({ liffId });
           setLiff(liffInstance);
           setIsInClient(liffInstance.isInClient());
+          setIsLoggedIn(true);
+          setIsReady(true);
+          return;
+        }
 
-          // External browser login: if not inside LINE app and not yet logged in,
-          // trigger LINE Login OAuth flow (RESEARCH.md Pattern 1, Pitfall 1)
-          if (!liffInstance.isInClient() && !liffInstance.isLoggedIn()) {
-            liffInstance.login({ redirectUri: window.location.href });
-            return; // redirect imminent
+        // No existing session — proceed with full LIFF auth flow
+        const liffModule = await import("@line/liff");
+        const liffInstance = liffModule.default;
+        await liffInstance.init({ liffId });
+        setLiff(liffInstance);
+        setIsInClient(liffInstance.isInClient());
+
+        // External browser: redirect to app's LINE Login OAuth (consistent UX)
+        if (!liffInstance.isInClient() && !liffInstance.isLoggedIn()) {
+          const returnTo = window.location.pathname + window.location.search;
+          window.location.href = `/api/auth/login/line?returnTo=${encodeURIComponent(returnTo)}`;
+          return;
+        }
+
+        // Inside LINE app: use LIFF ID token to create session
+        const idToken = liffInstance.getIDToken();
+        if (idToken) {
+          const res = await fetch("/api/auth/liff", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idToken }),
+          });
+          const data: { needsSetup?: boolean } = await res.json();
+
+          const isRelativePath = (path: string) =>
+            path.startsWith("/") && !path.includes("://");
+
+          if (data.needsSetup && !window.location.pathname.startsWith("/setup")) {
+            const rawReturnTo = window.location.pathname + window.location.search;
+            const encodedReturn = isRelativePath(rawReturnTo)
+              ? encodeURIComponent(rawReturnTo)
+              : encodeURIComponent("/");
+            window.location.href = `/setup?returnTo=${encodedReturn}`;
+            return;
           }
-
-          // After LIFF init, get ID token and authenticate with our server
-          // Per D-01: ID token is sent to /api/auth/liff (Next.js route handler, same origin)
-          // NOT through /api/proxy — avoids circular dependency and is a direct server call
-          const idToken = liffInstance.getIDToken();
-          if (idToken) {
-            fetch("/api/auth/liff", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ idToken }),
-            })
-              .then((res) => res.json())
-              .then((data: { needsSetup?: boolean }) => {
-                // Validate returnTo to prevent open redirect (T-10-02)
-                const isRelativePath = (path: string) =>
-                  path.startsWith("/") && !path.includes("://");
-
-                if (data.needsSetup && !window.location.pathname.startsWith("/setup")) {
-                  const rawReturnTo = window.location.pathname + window.location.search;
-                  const returnTo = isRelativePath(rawReturnTo)
-                    ? encodeURIComponent(rawReturnTo)
-                    : encodeURIComponent("/");
-                  window.location.href = `/setup?returnTo=${returnTo}`;
-                  return;
-                }
-                setIsLoggedIn(true);
-                setIsReady(true);
-              })
-              .catch(() => {
-                setLiffError("Authentication failed");
-                setIsReady(true);
-              });
-          } else {
-            setLiffError("Could not get ID token.");
-            setIsReady(true);
-          }
-        })
-      )
-      .catch((err: unknown) => {
+          setIsLoggedIn(true);
+          setIsReady(true);
+        } else {
+          setLiffError("Could not get ID token.");
+          setIsReady(true);
+        }
+      } catch (err: unknown) {
         setLiffError(String(err));
         setIsReady(true);
-      });
+      }
+    };
+
+    init();
   }, [liffId]);
 
   return (
