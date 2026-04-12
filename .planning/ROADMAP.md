@@ -22,7 +22,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 8: Data Validation Fixes** - Align venueName maxLength between API and DB, use validated env for LIFF_ID
 - [ ] **Phase 9: Event Details Page** - LIFF event details page so Flex Message "Details" CTA resolves instead of 404
 - [x] **Phase 10: Hybrid LIFF & Free Messaging** - Refactor LIFF pages for both LINE and browser, switch to free LIFF messaging (completed 2026-04-12)
-- [ ] **Phase 11: Club Hub & Events List** - Club hub navigation page and events list with upcoming + weekly recurring schedule
+- [x] **Phase 11: Club Hub & Events List** - Club hub navigation page and events list with upcoming + weekly recurring schedule (completed 2026-04-12)
 
 ## Phase Details
 
@@ -185,10 +185,10 @@ Plans:
   2. An events list page shows all upcoming events (one-time and generated from templates) sorted by date
   3. The events list page displays a weekly schedule section derived from active templates (e.g. "ทุกวันจันทร์ 19:00 สนาม X")
   4. Members can see the full recurring schedule even if events haven't been generated yet by cron
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 Plans:
-- [ ] 11-01-PLAN.md — API events list endpoint + website club hub transformation
-- [ ] 11-02-PLAN.md — LIFF club hub client component for in-LINE access
+- [x] 11-01-PLAN.md — API events list endpoint + website club hub transformation
+- [x] 11-02-PLAN.md — LIFF club hub client component for in-LINE access
 
 ## Progress
 
@@ -207,4 +207,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 8. Data Validation Fixes | 1/1 | Complete | 2026-04-09 |
 | 9. Event Details Page | 1/2 | In Progress|  |
 | 10. Hybrid LIFF & Free Messaging | 3/3 | Complete    | 2026-04-12 |
-| 11. Club Hub & Events List | 0/2 | Not started | - |
+| 11. Club Hub & Events List | 2/2 | Complete    | 2026-04-12 |
